@@ -14,7 +14,10 @@ setup(name='mipcat',
       author_email='a.almeida@unsw.edu.au',
       license='GPL v3',
       packages=['mipcat', 'mipcat.signal', 'mipcat.video', 'mipcat.align'],
-      package_data = {'mipcat': ['resources']},
+      package_data = {'mipcat': ['resources/melodies.yaml',
+                                 'resources/allruns.yaml',
+                                 'resources/file_list.yaml',
+                                 'resources/channel_desc.yaml']},
       test_suite = 'setup.my_tests',
       zip_safe=False)
 
