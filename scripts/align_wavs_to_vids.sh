@@ -9,7 +9,7 @@ for dir in ls -d $rootdir/*/; do
         do
             vfn=${vf//\//_}
             wfn=${wf//\//_}
-            ret=$(python -m clemotion.align.align_keypoints -c 5 $vf $wf > ${vfn}__${wfn}_align.txt )
+            ret=$(python -m mipcat.align.align_keypoints -c 5 $vf $wf > ${vfn}__${wfn}_align.txt )
         done
     done
 done

@@ -5,7 +5,7 @@ from numpy import sqrt, ones
 from tkinter import ttk
 from tkinter.messagebox import showinfo
 from PIL import Image, ImageTk
-from clemotion.video.template_trackers import calc_inner_rect, no_crop_rotate
+from mipcat.video.template_trackers import calc_inner_rect, no_crop_rotate
 from template_trackers import rotate_image
 
 
