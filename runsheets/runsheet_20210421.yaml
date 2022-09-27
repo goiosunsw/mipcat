@@ -1,0 +1,67 @@
+root_dir: "20210421 - Andre Emotion 3"
+melodies_file: "melodies.yaml"
+channel_desc:
+  default:
+      - axno: 2
+        desc: tongue contact
+        name: tongue
+        type: binary
+      - axno: 1
+        desc: reed displacement
+        name: reed
+        type: reed
+      - axno: 0
+        desc: mouth pressure
+        name: mouth
+        type: pressure
+      - axno: 0
+        desc: mouthpiece pressure
+        name: mouthpiece
+        type: pressure
+      - axno: 0
+        desc: barrel pressure
+        name: barrel
+        type: pressure
+      - axno: 0
+        desc: external pressure
+        name: external
+        type: pressure
+      - axno: null
+        desc: carrier signal
+        name: carrier
+        type: carrier
+  inversed_endevcos:
+      - axno: 2
+        desc: tongue contact
+        name: tongue
+        type: binary
+      - axno: 1
+        desc: reed displacement
+        name: reed
+        type: reed
+      - axno: 0
+        desc: mouthpiece pressure
+        name: mouthpiece
+        type: pressure
+      - axno: 0
+        desc: mouth pressure
+        name: mouth
+        type: pressure
+      - axno: 0
+        desc: barrel pressure
+        name: barrel
+        type: pressure
+      - axno: 0
+        desc: external pressure
+        name: external
+        type: pressure
+      - axno: null
+        desc: carrier signal
+        name: carrier
+        type: carrier
+wave_files:
+  - filename: AndreHappyBirthday.wav
+    tune: happy_birthday
+    excerpt_textgrid: AndreHappyBirthday_notes.TextGrid
+    notes_textgrid: AndreHappyBirthday_notes.TextGrid
+    instrument: 'lab'

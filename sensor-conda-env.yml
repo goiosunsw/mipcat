@@ -1,0 +1,42 @@
+name: sensor_clarinet      # any name for the environment
+channels:
+  - goiosunsw
+  - conda-forge
+  - bioconda
+dependencies:         # everything under this, installed by conda
+  - python
+  - pip
+  - numpy<=1.21.1
+  - pandas
+  - scipy
+  - scikit-learn
+  - statsmodels
+  - ipympl
+  - ipykernel
+  - tqdm
+  - librosa
+  - pyyaml
+  - jupyterlab
+  - nltk
+  - spacy
+  - pyahocorasick
+  - seaborn
+  - pyphen
+  - openpyxl
+  - xlwt
+  - widgetsnbextension
+  - nb_conda_kernels
+  - opencv
+  - scikit-image >= 0.18
+  - imutils
+  - pysimplegui
+  - pypevoc >= 0.2.0
+  - timeseries >= 0.1.0
+  - tesseract
+  - pytesseract
+  - pip:                # everything under this, installed by pip
+    - future
+    - mediapipe
+    - tgt
+
+

@@ -1,0 +1,298 @@
+default:
+- axno: 2
+  desc: tongue contact
+  name: tongue
+  type: binary
+  keep: True
+- axno: 1
+  desc: reed displacement
+  name: reed
+  type: reed
+  gain: 0.0025
+  offset: 0.05
+  units: m
+  keep: True
+- axno: 0
+  desc: mouth pressure
+  name: mouth
+  type: pressure
+  sensor_id: Endevco_142
+  gain: 26082.42 
+  offset: -0.00441
+  units: Pa
+  keep: True
+- axno: 0
+  desc: mouthpiece pressure
+  name: mouthpiece
+  type: pressure
+  sensor_id: Endevco_144
+  gain: 27155.04
+  offset: -0.00573
+  units: Pa
+  keep: True
+- axno: 0
+  desc: barrel pressure
+  name: barrel
+  type: pressure
+  sensor_id: B&K_bar
+  gain: 50000.0 
+  units: Pa
+  keep: True
+- axno: 0
+  desc: far pressure
+  name: farfield
+  type: pressure
+  sensor_id: Rode
+  gain: 1.0
+  units: 
+  keep: True
+- axno: 0
+  desc: external pressure
+  name: external
+  type: pressure
+  sensor_id: B&K_clar
+  gain: 50.0 
+  units: Pa
+  keep: True
+- axno: null
+  desc: carrier signal
+  name: carrier
+  type: carrier
+  keep: False
+endevco2:
+- axno: 2
+  desc: tongue contact
+  name: tongue
+  type: binary
+  keep: True
+- axno: 1
+  desc: reed displacement
+  name: reed
+  type: reed
+  gain: 0.0025
+  offset: 0.05
+  units: m
+  keep: True
+- axno: 0
+  desc: mouth pressure
+  name: mouth
+  type: pressure
+  sensor_id: Endevco_142
+  gain: 26082.42 
+  offset: -0.0043
+  units: Pa
+  keep: True
+- axno: 0
+  desc: mouthpiece pressure
+  name: mouthpiece
+  type: pressure
+  sensor_id: Endevco_143
+  gain: 30328.39
+  offset: -0.0068
+  units: Pa
+  keep: True
+- axno: 0
+  desc: barrel pressure
+  name: barrel
+  type: pressure
+  sensor_id: B&K_bar
+  gain: 50000.0 
+  units: Pa
+  keep: True
+- axno: 0
+  desc: farfield pressure
+  name: farfield
+  type: pressure
+  sensor_id: Rode
+  gain: 1.0
+  units: 
+  keep: True
+- axno: 0
+  desc: external pressure
+  name: external
+  type: pressure
+  sensor_id: B&K_clar
+  gain: 50.0 
+  units: Pa
+  keep: True
+- axno: null
+  desc: carrier signal
+  name: carrier
+  type: carrier
+  keep: False
+ext_only:
+- axno: 2
+  desc: tongue contact
+  name: tongue
+  type: binary
+  keep: False
+- axno: 1
+  desc: reed displacement
+  name: reed
+  type: reed
+  gain: 0.0025
+  offset: 0.05
+  units: m
+  keep: False
+- axno: 0
+  desc: mouth pressure
+  name: mouth
+  type: pressure
+  sensor_id: Endevco_142
+  gain: 26082.42 
+  units: Pa
+  keep: False
+- axno: 0
+  desc: mouthpiece pressure
+  name: mouthpiece
+  type: pressure
+  sensor_id: Endevco_143
+  gain: 22430.88
+  units: Pa
+  keep: False
+- axno: 0
+  desc: barrel pressure
+  name: barrel
+  type: pressure
+  sensor_id: B&K_bar
+  gain: 50000.0 
+  units: Pa
+  keep: False
+- axno: 0
+  desc: farfield pressure
+  name: farfield
+  type: pressure
+  sensor_id: Rode
+  gain: 1.0
+  units: 
+  keep: True
+- axno: 0
+  desc: external pressure
+  name: external
+  type: pressure
+  sensor_id: B&K_clar
+  gain: 50000.0 
+  units: Pa
+  keep: True
+- axno: null
+  desc: carrier signal
+  name: carrier
+  type: carrier
+  keep: False
+farfield_only:
+- axno: 2
+  desc: tongue contact
+  name: tongue
+  type: binary
+  keep: False
+- axno: 1
+  desc: reed displacement
+  name: reed
+  type: reed
+  gain: 0.0025
+  offset: 0.05
+  units: m
+  keep: False
+- axno: 0
+  desc: mouth pressure
+  name: mouth
+  type: pressure
+  sensor_id: Endevco_142
+  gain: 26082.42 
+  units: Pa
+  keep: False
+- axno: 0
+  desc: mouthpiece pressure
+  name: mouthpiece
+  type: pressure
+  sensor_id: Endevco_143
+  gain: 22430.88
+  units: Pa
+  keep: False
+- axno: 0
+  desc: barrel pressure
+  name: barrel
+  type: pressure
+  sensor_id: B&K_bar
+  gain: 50000.0 
+  units: Pa
+  keep: False
+- axno: 0
+  desc: farfield pressure
+  name: farfield
+  type: pressure
+  sensor_id: Rode
+  gain: 1.0
+  units: 
+  keep: True
+- axno: 0
+  desc: external pressure
+  name: external
+  type: pressure
+  sensor_id: B&K_clar
+  gain: 50000.0 
+  units: Pa
+  keep: False
+- axno: null
+  desc: carrier signal
+  name: carrier
+  type: carrier
+  keep: False
+inversed_endevcos:
+- axno: 2
+  desc: tongue contact
+  name: tongue
+  type: binary
+  keep: True
+- axno: 1
+  desc: reed displacement
+  name: reed
+  type: reed
+  gain: 0.0025
+  offset: 0.05
+  keep: True
+  units: m
+- axno: 0
+  desc: mouthpiece pressure
+  name: mouthpiece
+  type: pressure
+  keep: True
+- axno: 0
+  desc: mouth pressure
+  name: mouth
+  type: pressure
+  keep: True
+generic_clarinet:
+- axno: 2
+  desc: tongue contact
+  name: tongue
+  type: binary
+  keep: False
+- axno: 1
+  desc: reed displacement
+  name: reed
+  type: reed
+  gain: 0.0025
+  offset: 0.05
+  units: m
+  keep: False
+- axno: 0
+  desc: mouthpiece pressure
+  name: mouthpiece
+  type: pressure
+  keep: False
+- axno: 0
+  desc: mouth pressure
+  name: mouth
+  type: pressure
+  keep: False
+- axno: 0
+  desc: barrel pressure
+  name: barrel
+  type: pressure
+  keep: False
+- axno: 0
+  desc: external pressure
+  name: external
+  type: pressure
+  keep: True

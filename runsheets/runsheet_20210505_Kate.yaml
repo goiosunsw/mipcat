@@ -1,0 +1,77 @@
+root_dir: "20210505"
+melodies_file: "melodies.yaml"
+channel_desc:
+  default:
+      - axno: 2
+        desc: tongue contact
+        name: tongue
+        type: binary
+      - axno: 1
+        desc: reed displacement
+        name: reed
+        type: reed
+      - axno: 0
+        desc: mouth pressure
+        name: mouth
+        type: pressure
+      - axno: 0
+        desc: mouthpiece pressure
+        name: mouthpiece
+        type: pressure
+      - axno: 0
+        desc: barrel pressure
+        name: barrel
+        type: pressure
+      - axno: 0
+        desc: external pressure
+        name: external
+        type: pressure
+      - axno: null
+        desc: carrier signal
+        name: carrier
+        type: carrier
+  inversed_endevcos:
+      - axno: 2
+        desc: tongue contact
+        name: tongue
+        type: binary
+      - axno: 1
+        desc: reed displacement
+        name: reed
+        type: reed
+      - axno: 0
+        desc: mouthpiece pressure
+        name: mouthpiece
+        type: pressure
+      - axno: 0
+        desc: mouth pressure
+        name: mouth
+        type: pressure
+      - axno: 0
+        desc: barrel pressure
+        name: barrel
+        type: pressure
+      - axno: 0
+        desc: external pressure
+        name: external
+        type: pressure
+      - axno: null
+        desc: carrier signal
+        name: carrier
+        type: carrier
+wave_files:
+  - filename: Beethoven.wav
+    tune: beethoven
+    excerpt_textgrid: Beethoven_eg.TextGrid
+    notes_textgrid: Beethoven_notes.TextGrid
+    instrument: lab
+  - filename: Nobody.wav
+    tune: nobody
+    excerpt_textgrid: Nobody_eg.TextGrid
+    notes_textgrid: Nobody_notes.TextGrid
+    instrument: lab
+  - filename: HappyBirthday.wav
+    tune: happy_birthday
+    excerpt_textgrid: HappyBirthday_eg.TextGrid
+    notes_textgrid: HappyBirthday_notes.TextGrid
+    instrument: lab

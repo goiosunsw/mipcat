@@ -1,0 +1,1001 @@
+happy_birthday:
+    name: "Happy birthday"
+    bar_duration: 3
+    notes:
+        - duration: .75
+          pitch: D4
+        - duration: .25
+          pitch: D4
+        - duration: 1
+          pitch: E4
+          strong_beat: true
+        - duration: 1
+          pitch: D4
+        - duration: 1
+          pitch: G4
+        - duration: 2
+          pitch: F#4
+        - duration: .75
+          pitch: D4
+        - duration: .25
+          pitch: D4
+        - duration: 1
+          pitch: E4
+        - duration: 1
+          pitch: D4
+        - duration: 1
+          pitch: A4
+        - duration: 2
+          pitch: G4
+        - duration: .75
+          pitch: D4
+        - duration: .25
+          pitch: D4
+        - duration: 1
+          pitch: D5
+        - duration: 1
+          pitch: B4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: F#4
+        - duration: 1
+          pitch: E4
+        - duration: .75
+          pitch: C5
+        - duration: .25
+          pitch: C5
+        - duration: 1
+          pitch: B4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: A4
+        - duration: 3
+          pitch: G4
+nobody:
+    name: "Nobody Knows"
+    bar_duration: 4
+    notes:
+        - duration: .5
+          pitch: B4
+          strong_beat: True
+        - duration: 1
+          pitch: D4
+        - duration: .5
+          pitch: E4
+        - duration: 1.5
+          pitch: G4
+        - duration: .5
+          pitch: A4
+        - duration: .75
+          pitch: B4
+        - duration: .25
+          pitch: B4
+        - duration: 1
+          pitch: B4
+        - duration: 2
+          pitch: B4
+        - duration: .5
+          pitch: B4
+        - duration: 1
+          pitch: D4
+        - duration: .5
+          pitch: E4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: E4
+        - duration: 3
+          pitch: D4
+        - duration: .5
+          pitch: B4
+        - duration: 1
+          pitch: D4
+        - duration: .5
+          pitch: E4
+        - duration: 1.5
+          pitch: G4
+        - duration: .5
+          pitch: A4
+        - duration: .75
+          pitch: B4
+        - duration: .25
+          pitch: B4
+        - duration: 1
+          pitch: B4
+        - duration: 2
+          pitch: B4
+        - duration: 1.5
+          pitch: D5
+        - duration: 0.5
+          pitch: B4
+        - duration: 1
+          pitch: A4
+        - duration: 1
+          pitch: B4
+        - duration: 2
+          pitch: G4
+        - duration: 1
+          pitch: G4
+beethoven:
+    name: "Beethoven alegretto"
+    bar_duration: 2
+    notes:
+        - duration: 1
+          pitch: G4
+          strong_beat: true
+        - duration: .5
+          pitch: G4
+        - duration: .5
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: .5
+          pitch: G4
+        - duration: .5
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: 1
+          pitch: G4
+        - duration: .5
+          pitch: G4
+        - duration: .5
+          pitch: A4
+        - duration: 1
+          pitch: Bb4
+        - duration: 1
+          pitch: Bb4
+        - duration: 1
+          pitch: Bb4
+        - duration: .5
+          pitch: Bb4
+        - duration: .5
+          pitch: Bb4
+        - duration: 1
+          pitch: Bb4
+          has_suspension: True
+        - duration: 1
+          pitch: G5
+        - duration: .5
+          pitch: G5
+        - duration: .5
+          pitch: G5
+        - duration: 1
+          pitch: G5
+        - duration: 1
+          pitch: G5
+        - duration: 1
+          pitch: G5
+        - duration: .5
+          pitch: G5
+        - duration: .5
+          pitch: G5
+        - duration: 1
+          pitch: G5
+        - duration: 1
+          pitch: G5
+        - duration: 1
+          pitch: G5
+        - duration: .5
+          pitch: G5
+        - duration: .5
+          pitch: A5
+        - duration: 1
+          pitch: Bb5
+        - duration: 1
+          pitch: Bb5
+        - duration: 1
+          pitch: Bb5
+        - duration: .5
+          pitch: Bb5
+        - duration: .5
+          pitch: Bb5
+        - duration: 1
+          pitch: Bb5
+mozart:
+    name: "Mozart clarinet concerto K.622"
+    bar_duration: 3
+    notes:
+        - duration: 1
+          pitch: C5
+          strong_beat: true
+        - duration: 1.5
+          pitch: F5
+        - duration: 0.5
+          pitch: A5
+        - duration: 0.5
+          pitch: A5
+        - duration: 0.5
+          pitch: G5
+        - duration: 1.0
+          pitch: F5
+        - duration: 1.0
+          pitch: 0
+        - duration: 1.5
+          pitch: C5
+        - duration: 0.5
+          pitch: F5
+        - duration: 0.5
+          pitch: A5
+        - duration: 0.5
+          pitch: C6
+        - duration: 0.5
+          pitch: C6
+        - duration: 0.5
+          pitch: Bb5
+        - duration: 1.0
+          pitch: A5
+        - duration: 1.0
+          pitch: 0
+        - duration: 1.5
+          pitch: G5
+        - duration: 0.5
+          pitch: C6
+        - duration: 0.5
+          pitch: A5
+        - duration: 0.5
+          pitch: C6
+        - duration: 1.5
+          pitch: G5
+        - duration: 0.5
+          pitch: C6
+        - duration: 0.5
+          pitch: D5
+        - duration: 0.5
+          pitch: A5
+        - duration: 1.75
+          pitch: C5
+        - duration: 0.25
+          pitch: E5
+          ornament: true
+        - duration: 0.75
+          pitch: D5
+        - duration: 0.25
+          pitch: C5
+        - duration: 1.0
+          pitch: C5
+rhapsody:
+    name: "Rhapsody in blue"
+    bar_duration: 4
+    notes:
+        - duration: 2
+          pitch: G3
+          trill: true
+        - duration: 2
+          pitch: G3
+          pitch_to: B5
+        - duration: 1.75
+          pitch: C6
+          strong_beat: true
+        - duration: 0.125
+          pitch: Bb5
+        - duration: 0.125
+          pitch: C6
+        - duration: 0.333
+          pitch: Bb5
+          staccato: true
+        - duration: 0.333
+          pitch: Ab5
+          staccato: true
+        - duration: 0.333
+          pitch: Bb5
+          staccato: true
+        - duration: 0.333
+          pitch: Ab5
+          staccato: true
+        - duration: 0.333
+          pitch: Bb5
+          staccato: true
+        - duration: 0.333
+          pitch: Ab5
+          staccato: true
+        - duration: 0.5
+          pitch: G5
+        - duration: 0.5
+          pitch: F5
+        - duration: 0.5
+          pitch: E5
+        - duration: 1.0
+          pitch: Eb5
+        - duration: 0.5
+          pitch: F5
+        - duration: 0.5
+          pitch: F#5
+        - duration: 1.0
+          pitch: G5
+        - duration: 0.5
+          pitch: E5
+        - duration: 0.125
+          pitch: C5
+        - duration: 0.125
+          pitch: D5
+        - duration: 0.125
+          pitch: C5
+        - duration: 0.125
+          pitch: B4
+        - duration: 1.0
+          pitch: Bb4
+        - duration: 0.5
+          pitch: Ab4
+        - duration: 0.5
+          pitch: G4
+        - duration: 3.5
+          pitch: G4
+mussorgsky:
+    name: "Night on a bald mountain"
+    bar_duration: 4
+    notes:
+        - duration: 2.5
+          pitch: C6
+          strong_beat: true
+        - duration: 0.5
+          pitch: A5
+        - duration: 0.5
+          pitch: E5
+        - duration: 0.5
+          pitch: C6
+        - duration: 0.125
+          pitch: B5
+          ornament: true
+        - duration: 0.125
+          pitch: C6
+          ornament: true
+        - duration: 0.667
+          pitch: B5
+        - duration: 0.666
+          pitch: G5
+        - duration: 0.667
+          pitch: E5
+        - duration: 2.0
+          pitch: E6
+        - duration: 2.333
+          pitch: A5
+        - duration: 0.333
+          pitch: G5
+        - duration: 0.334
+          pitch: F5
+        - duration: 0.333
+          pitch: F5
+        - duration: 0.333
+          pitch: G5
+        - duration: 0.334
+          pitch: A5
+        - duration: 2.0
+          pitch: G5
+        - duration: 1.5
+          pitch: E5
+        - duration: 0.5
+          pitch: 0
+        - duration: 0.5
+          pitch: F5
+        - duration: 0.5
+          pitch: G5
+        - duration: 0.5
+          pitch: A5
+        - duration: 0.5
+          pitch: A5
+        - duration: 1.0
+          pitch: G5
+        - duration: 1.0
+          pitch: F5
+        - duration: 0.667
+          pitch: E5
+        - duration: 0.666
+          pitch: C5
+        - duration: 0.667
+          pitch: E5
+        - duration: 0.667
+          pitch: C6
+        - duration: 0.666
+          pitch: C6
+        - duration: 0.667
+          pitch: C6
+        - duration: 2.0
+          pitch: B5
+        - duration: 2.0
+          pitch: A5
+        - duration: 2.0
+          pitch: E5
+ravel:
+    name: "Ravel piano concerto"
+    bar_duration: 3
+    notes:
+        - duration: 1.0
+          pitch: E5
+          strong_beat: true
+        - duration: 1.0
+          pitch: B5
+        - duration: 1.0
+          pitch: F#6
+        - duration: 1.5
+          pitch: D6
+        - duration: 0.5
+          pitch: C#6
+        - duration: 1.0
+          pitch: E6
+        - duration: 1.0
+          pitch: D6
+        - duration: 1.0
+          pitch: C#6
+        - duration: 1.0
+          pitch: C6
+        - duration: 1.0
+          pitch: E5
+        - duration: 1.5
+          pitch: F#5
+mahler9:
+    name: "Mahler, symphony no 9"
+    bar_duration: 4
+    notes:
+        - duration: 1.0
+          pitch: Fb6
+        - duration: 1.0
+          pitch: Eb6
+        - duration: 0.5
+          pitch: Fb6
+          strong_beat: true
+        - duration: 0.25
+          pitch: Eb6
+        - duration: 0.25
+          pitch: Db6
+        - duration: 0.5
+          pitch: Cb6
+        - duration: 0.5
+          pitch: Bb5
+        - duration: 1.0
+          pitch: Ab5
+        - duration: 1.0
+          pitch: Db6
+        - duration: 0.5
+          pitch: Db6
+        - duration: 0.5
+          pitch: Ab5
+        - duration: 0.25
+          pitch: Bb5
+        - duration: 0.25
+          pitch: Ab5
+        - duration: 0.25
+          pitch: Gb5
+        - duration: 0.25
+          pitch: Ab5
+        - duration: 1.0
+          pitch: Fb5
+        - duration: 1.0
+          pitch: Ab5
+        - duration: 0.5
+          pitch: Ab5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 0.25
+          pitch: Fb5
+        - duration: 0.25
+          pitch: Eb5
+        - duration: 0.25
+          pitch: Db5
+        - duration: 0.25
+          pitch: Eb5
+        - duration: 0.75
+          pitch: Ab4
+        - duration: 0.25
+          pitch: Cb5
+        - duration: 0.25
+          pitch: Db5
+        - duration: 0.25
+          pitch: Cb5
+        - duration: 0.25
+          pitch: Bbb4
+        - duration: 0.25
+          pitch: Ab4
+        - duration: 6.0
+          pitch: 0
+        - duration: 2.0
+          pitch: Eb6
+        - duration: 1.5
+          pitch: Db6
+        - duration: 0.5
+          pitch: Eb6
+        - duration: 2.0
+          pitch: Cb6
+        - duration: 1.0
+          pitch: Bb5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 0.5
+          pitch: Fb5
+        - duration: 1.5
+          pitch: Gb5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 1.5
+          pitch: Ab5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 1.5
+          pitch: Gb5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 1.5
+          pitch: Ab5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 0.25
+          pitch: F5
+        - duration: 0.25
+          pitch: Eb5
+        - duration: 0.25
+          pitch: Db5
+        - duration: 0.25
+          pitch: Eb5
+        - duration: 1.0
+          pitch: Gb5
+        - duration: 0.5
+          pitch: Fb5
+        - duration: 0.5
+          pitch: Eb5
+        - duration: 1.0
+          pitch: Cb4
+        - duration: 0.5
+          pitch: Db4
+        - duration: 0.5
+          pitch: Ebb4
+        - duration: 1.0
+          pitch: Eb4
+mahler5:
+    name: "Mahler 5th symphony, Rondo-Finale"
+    bar_duration: 4
+    notes: 
+        - duration: 1.0
+          pitch: A5
+          strong_beat: true
+        - duration: 1.0
+          pitch: G5
+        - duration: 1.0
+          pitch: F5
+        - duration: 1.0
+          pitch: C6
+        - duration: 1.0
+          pitch: D6
+        - duration: 0.5
+          pitch: C6
+        - duration: 0.5
+          pitch: D6
+          staccato: true
+        - duration: 0.5
+          pitch: A5
+          staccato: true
+        - duration: 0.5
+          pitch: D6
+          staccato: true
+        - duration: 0.5
+          pitch: E6
+          staccato: true
+        - duration: 1.0
+          pitch: F6
+          staccato: true
+        - duration: 1.0
+          pitch: D6
+          staccato: true
+        - duration: 1.0
+          pitch: C6
+          staccato: true
+        - duration: 1.0
+          pitch: A5
+          staccato: true
+        - duration: 1.0
+          pitch: C6
+          staccato: true
+        - duration: 0.5
+          pitch: Bb5
+          staccato: true
+        - duration: 0.5
+          pitch: A5
+          staccato: true
+        - duration: 7.0
+          pitch: G5
+bolero:
+    name: "Ravel, Bolero"
+    bar_duration: 3
+    notes: 
+        - duration: 1.5
+          pitch: D5
+          strong_beat: true
+        - duration: 0.25
+          pitch: C5
+        - duration: 0.25
+          pitch: D5
+        - duration: 0.25
+          pitch: E5
+        - duration: 0.25
+          pitch: D5
+        - duration: 0.25
+          pitch: C#5
+        - duration: 0.25
+          pitch: B4
+        - duration: 0.5
+          pitch: D5
+        - duration: 0.25
+          pitch: D5
+        - duration: 0.25
+          pitch: B4
+        - duration: 1.5
+          pitch: D5
+        - duration: 0.25
+          pitch: C#5
+        - duration: 0.25
+          pitch: D5
+        - duration: 0.25
+          pitch: B4
+        - duration: 0.25
+          pitch: A4
+          alt_possible: true
+        - duration: 0.25
+          pitch: F#4
+        - duration: 0.25
+          pitch: G4
+          alt_possible: true
+        - duration: 2.25
+          pitch: A4
+          alt_possible: true
+        - duration: 0.25
+          pitch: G4
+          alt_possible: true
+        - duration: 0.25
+          pitch: F#4
+        - duration: 0.25
+          pitch: E4
+        - duration: 0.25
+          pitch: F#4
+        - duration: 0.25
+          pitch: G4
+          alt_possible: true
+        - duration: 0.25
+          pitch: A4
+          alt_possible: true
+        - duration: 0.25
+          pitch: B4
+        - duration: 2.25
+          pitch: A4
+          alt_possible: true
+        - duration: 0.25
+          pitch: B4
+        - duration: 0.25
+          pitch: C#5
+        - duration: 0.25
+          pitch: B4
+        - duration: 0.25
+          pitch: A4
+          alt_possible: true
+        - duration: 0.25
+          pitch: G4
+          alt_possible: true
+        - duration: 0.25
+          pitch: F#4
+        - duration: 0.25
+          pitch: E4
+        - duration: 0.25
+          pitch: F#4
+        - duration: 0.25
+          pitch: E4
+        - duration: 1.0
+          pitch: D4
+        - duration: 0.25
+          pitch: D4
+        - duration: 0.25
+          pitch: E4
+        - duration: 0.5
+          pitch: F#4
+          staccato: true
+        - duration: 0.5
+          pitch: G4
+          alt_possible: true
+          staccato: true
+        - duration: 1.0
+          pitch: E4
+        - duration: 4.5
+          pitch: A4
+          alt_possible: true
+brahms:
+    name: "Brahms, Andante Moderato"
+    bar_duration: 3
+    notes: 
+        - duration: 2.5 
+          pitch: B4
+        - duration: 0.375
+          pitch: C5
+        - duration: 0.125
+          pitch: D5
+        - duration: 1.0
+          pitch: B4
+        - duration: 0.375
+          pitch: A4
+          alt_possible: true
+        - duration: 0.125
+          pitch: G4
+          alt_possible: true
+        - duration: 1.0
+          pitch: B4
+          strong_beat: true
+        - duration: 0.375
+          pitch: A4
+          alt_possible: true
+        - duration: 0.125
+          pitch: G4
+          alt_possible: true
+        - duration: 1.0
+          pitch: B4
+        - duration: 0.375
+          pitch: G4
+          alt_possible: true
+        - duration: 0.125
+          pitch: D4
+        - duration: 1.0
+          pitch: F4
+        - duration: 0.375
+          pitch: Eb4
+        - duration: 0.125
+          pitch: F4
+        - duration: 1.0
+          pitch: D4
+        - duration: 0.375
+          pitch: G4
+          alt_possible: true
+        - duration: 0.125
+          pitch: D4
+        - duration: 1.0
+          pitch: F4
+        - duration: 0.375
+          pitch: Eb4
+        - duration: 0.125
+          pitch: F4
+        - duration: 1.0
+          pitch: D4
+        - duration: 0.375
+          pitch: D5
+        - duration: 0.125
+          pitch: B4
+        - duration: 1.0
+          pitch: A4
+          alt_possible: true
+        - duration: 0.375
+          pitch: D5
+        - duration: 0.125
+          pitch: B4
+        - duration: 1.0
+          pitch: A4
+          alt_possible: true
+        - duration: 0.5
+          pitch: B4
+        - duration: 0.5
+          pitch: C5
+        - duration: 0.75
+          pitch: E5
+        - duration: 0.25
+          pitch: C5
+        - duration: 1.0
+          pitch: B4
+        - duration: 0.5
+          pitch: C#5
+        - duration: 0.5
+          pitch: D5
+        - duration: 0.75
+          pitch: F#5
+        - duration: 0.25
+          pitch: D5
+        - duration: 0.5
+          pitch: B4
+        - duration: 0.75
+          pitch: F#5
+        - duration: 0.25
+          pitch: D5
+        - duration: 0.5
+          pitch: B4
+        - duration: 1.5
+          pitch: F#5
+        - duration: 0.5
+          pitch: D5
+        - duration: 0.5
+          pitch: C#5
+        - duration: 1.0
+          pitch: B4
+carmen:
+    name: "Bizet, Carmen, Intermezzo no 2"
+    bar_duration: 4
+    notes: 
+        - duration: 1.5 
+          pitch: F4
+          strong_beat: true
+        - duration: 0.5 
+          pitch: G4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: Bb4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: A4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: G4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: F4
+        - duration: 1.0
+          pitch: C5
+        - duration: 0.33
+          pitch: D5
+        - duration: 0.33
+          pitch: A4
+          alt_possible: true
+        - duration: 0.33
+          pitch: D5
+        - duration: 1.0
+          pitch: C5
+        - duration: .5
+          pitch: 0
+        - duration: 0.5
+          pitch: C5
+        - duration: 0.5
+          pitch: D5
+        - duration: 0.5
+          pitch: E5
+        - duration: 1.5
+          pitch: F5
+        - duration: 0.5
+          pitch: E5
+        - duration: 0.5
+          pitch: D5
+        - duration: 0.5
+          pitch: A4
+          alt_possible: true
+        - duration: 0.5
+          pitch: A4
+          alt_possible: true
+        - duration: 0.5
+          pitch: C5
+        - duration: 0.125
+          pitch: G4
+          alt_possible: true
+          ornament: true
+        - duration: 0.125
+          pitch: A4
+          alt_possible: true
+          ornament: true
+        - duration: 0.5
+          pitch: G4
+          alt_possible: true
+        - duration: 0.25
+          pitch: F4
+        - duration: 1.0
+          pitch: G4
+          alt_possible: true
+        - duration: 1.0
+          pitch: C4
+        - duration: 1.5 
+          pitch: F4
+        - duration: 0.5 
+          pitch: G4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: Bb4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: A4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: G4
+          alt_possible: true
+        - duration: 0.5 
+          pitch: F4
+        - duration: 1.0
+          pitch: C5
+        - duration: 0.33
+          pitch: D5
+        - duration: 0.33
+          pitch: A4
+          alt_possible: true
+        - duration: 0.33
+          pitch: D5
+        - duration: 1.0
+          pitch: C5
+        - duration: .5
+          pitch: 0
+        - duration: .5
+          pitch: C5
+        - duration: .5
+          pitch: D5
+        - duration: .5
+          pitch: E5
+        - duration: 1.5
+          pitch: F5
+        - duration: .5
+          pitch: A5
+        - duration: .5
+          pitch: G5
+        - duration: .5
+          pitch: F5
+gab:
+    name: "Exercise on resonant fingerings"
+    bar_duration: 4
+    notes: 
+        - duration: 2.0
+          pitch: G4
+          alt_possible: true
+          strong_beat: true
+        - duration: 2.0
+          pitch: A4
+          alt_possible: true
+        - duration: 2.0
+          pitch: Bb4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: G4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: A4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: Bb4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: Bb4
+          alt_possible: true
+        - duration: 2.0
+          pitch: A4
+          alt_possible: true
+        - duration: 2.0
+          pitch: G4
+          alt_possible: true
+        - duration: 2.0
+          pitch: 0
+        - duration: 2.0
+          pitch: G4
+          alt_possible: true
+        - duration: 2.0
+          pitch: A4
+          alt_possible: true
+        - duration: 2.0
+          pitch: Bb4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: G4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: A4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: Bb4
+          alt_possible: true
+        - duration: 2.0
+          pitch: C5
+        - duration: 2.0
+          pitch: Bb4
+          alt_possible: true
+        - duration: 2.0
+          pitch: A4
+          alt_possible: true
+        - duration: 2.0
+          pitch: G4
+          alt_possible: true

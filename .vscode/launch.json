@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": [
+                "-N 20",
+                "/media/sdcard/Data/20211020 - Andre test/Mouthpiece/nk.mp4"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}

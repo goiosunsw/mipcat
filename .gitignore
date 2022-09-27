@@ -1,0 +1,7 @@
+*.py.bak
+*.py.swp
+*.pyc
+*.py.un~
+*~
+
+collection/timeseries_generator.py.bak

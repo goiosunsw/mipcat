@@ -1,0 +1,28 @@
+root_folder: .
+data_folder: /srv/scratch/z3227932/Data/2021_SensorClarinet
+subjects:
+  - name: Andre
+    id: 0
+    level: beginner
+  - name: Kate
+    id: 1
+    level: amateur
+  - name: Sasha
+    id: 2
+    level: amateur
+  - name: David 
+    id: 3
+    level: professional
+runsheets:
+  - runsheet: runsheet_20210421.yaml
+    subject_id: 0
+  - runsheet: runsheet_20210410.yaml
+    subject_id: 0
+  - runsheet: runsheet_20210505_Kate.yaml
+    subject_id: 1
+  - runsheet: runsheet_20210512_Sasha.yaml
+    subject_id: 2
+  - runsheet: runsheet_20210519.yaml
+    subject_id: 3
+  - runsheet: runsheet_20210526.yaml
+    subject_id: 1
