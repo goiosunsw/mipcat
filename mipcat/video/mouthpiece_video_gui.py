@@ -118,6 +118,7 @@ class CVVideo(tk.Frame, MouthpieceTracker):
     def set_video(self,video_file):
         conffile = os.path.splitext(video_file)[0]+'_conf.json'
         self.set_video_source(video_file=video_file)
+        self.position.configure(to=self.max_time)
         try:
             self.read_config(conffile)
         except Exception:
@@ -281,7 +282,7 @@ class PushButtons(tk.Frame):
         self.template_display.pack()
         
 
-        self.process_var = tk.BooleanVar(False)
+        self.process_var = tk.BooleanVar(value=False)
         self.process_check = tk.Checkbutton(self,text="Process", 
                                             variable = self.process_var,
                                             command=lambda: self.on_change("process"))
