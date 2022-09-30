@@ -80,10 +80,16 @@ A bunch of warnings appear, and the last line should say
 
 `27.813179131929964 sec, 48.29 % matches`
 
-This means that the beginning of the video file is 27.81 seconds into the `WAV` file
+This means that the beginning of the video file is **27.81 seconds** into the `WAV` file
 
 
 # Collect all the note regions into a general note database
 
+From the root folder of the dataset (`mozart_sample`)
 
+```bash
+python -m mipcat.signal.textgrid_collector . > mozart_notes.csv
+```
+
+This generates a CSV file `mozart_notes.csv` with the source testgrid files, the excerpt label and the note label as well as start and end times. 
 
