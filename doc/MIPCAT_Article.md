@@ -33,9 +33,57 @@ For privacy concerns, only one example is provided with video files. For the rem
 
 Run
 ```bash
-python 
+python -m mipcat.video.mouthpiece_video_gui P10_Mozart_Lab_Mouthpiece.mp4
 ```
 
+- Adjust the hue values so that the green strip is easily separated from other detected areas
+- Slightly increase the minimum saturation
+- Select a rectangle including the number *25* in the video 
+- Activate the *Process* check box
+- Select a rectangle including the number *25* (again, this is because of a bug)
+- Scroll through the video and check that the detection works for most of the frames (especially those where the player has his mouth on the mouthpiece)
+- Click the *Write* button to write the video configuration
+
+A configuration file should have been created with the name `P10_Mozart_Lab_Mouthpiece_conf.json`
+
+## Run the mouthpiece covering measurement
+
+Run 
+```bash
+python -m mipcat.video.mouthpiece_tracker P10_Mozart_Lab_Mouthpiece.mp4
+```
+
+A measurement file should have been created with the name `P10_Mozart_Lab_Mouthpiece_video_analysis.json`
+
+## Run the clarinet tracker for the GOPRO videos
+
+For each of the `_Front` and `_Side` video files, run:
+
+```bash
+python -m mipcat.video.aruco_tracker P10_Mozart_Lab_Front.MP4
+```
+
+A file should be created with the name `P10_Mozart_Lab_Front.json` with the positions of the detected markers.
+
+Repeat for `P10_Mozart_Lab_Side.MP4`
+
+# Find the delay between the signal file and the videos
+
+Run
+```bash
+python -m mipcat.align.align_keypoints -c 5 P10_Mozart_Lab_Front.MP4 P10_Mozart_Lab.WAV
+```
+
+This calculates the delay between the `WAV` recording and the video recording, using channel 6 (numbering starts at 0) in the `WAV` file.
+
+A bunch of warnings appear, and the last line should say
+
+`27.813179131929964 sec, 48.29 % matches`
+
+This means that the beginning of the video file is 27.81 seconds into the `WAV` file
+
+
 # Collect all the note regions into a general note database
+
 
 
