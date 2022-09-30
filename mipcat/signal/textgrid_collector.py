@@ -2,7 +2,7 @@ import os
 import sys
 import tgt
 
-rootdir = sys.argv[1:]
+rootdir = sys.argv[1]
 
 def fix_utf(x):
     return str(x).replace('\u266f','#').encode('utf-8').decode('utf-8')
