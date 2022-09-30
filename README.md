@@ -26,7 +26,7 @@ in a command prompt or shell
 
 # Example: MIPCAT article figure generation
 
-Using the example dataset, the figures in the article [1] can be generated following the procedure in (docs/MIPCAT_Article.md)[docs/MIPCAT_Article.md]
+Using the example dataset, the figures in the article [1] can be generated following the procedure in [docs/MIPCAT_Article.md](docs/MIPCAT_Article.md)
 
 
 ## Create metadata lists
