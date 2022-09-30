@@ -10,7 +10,8 @@ def fix_utf(x):
 print("text_grid,clip,start,end,label")
 
 for folder, dirs, files in os.walk(rootdir):
-    for arg in files:
+    for f in files:
+        arg = os.path.join(folder,f)
         if arg.lower().find('.textgrid') > -1:
             tg = tgt.read_textgrid(arg)
             for tiername in ['note','notes','Notes','Note']:
