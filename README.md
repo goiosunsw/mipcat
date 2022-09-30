@@ -3,6 +3,7 @@
 MIPCAT is a toolbox to capture different physical aspects of performance on a musical instrument and analyse the resulting data.
 
 The project consists of hardware and software modules. This repository mostly organises the different software components. Blueprints for parts of the hardware are also given in the Hardware folder
+
 # Installation
 - Install Anaconda if you don't have it. Anaconda is a scientific python distribution available for Windows, Mac OS and Linux
 - Open a conda terminal
@@ -22,6 +23,12 @@ or run
 conda activate mipcat
 ```
 in a command prompt or shell
+
+# Example: MIPCAT article figure generation
+
+Using the example dataset, the figures in the article [1] can be generated following the procedure in [docs/MIPCAT_Article.md]
+
+
 ## Create metadata lists
 3 different files are needed for the following sequence:
 
