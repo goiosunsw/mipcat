@@ -11,7 +11,7 @@
     It can be used for example to align audio between one camera
     and a reference microphone
 """
-
+import os
 import argparse
 import numpy as np
 import librosa as lr
@@ -189,6 +189,8 @@ def parse_args():
                         help="Number of chunks in delayed file to use for comparison")
     parser.add_argument("-c", "--channel", type=int, default=0,
                         help="Channel number for reference signal")
+    parser.add_argument("-t", "--table", type=int, default=0,
+                        help="Output comma separated file names, delay and number of matches to add to a CSV file")
 
     parser.add_argument("-v", "--verbose", action='store_true',
                         help="Output extra information")
@@ -239,5 +241,10 @@ if __name__ == "__main__":
 
     dt, frac = compare_files(args.file1, args.file2, channel1=0, 
                        channel2=args.channel, delta_t_max=5.0)
-    print(f'{dt} sec, {frac*100:.2f} % matches')
+    if args.table:
+        f2_dir, f2_name = os.path.split(args.file2)
+        rel_file1 = os.path.relpath(args.file1, f2_dir)
+        print(f"{args.file2}, {rel_file1}, {args.channel}, {dt}, {frac}")
+    else:
+        print(f'{dt} sec, {frac*100:.2f} % matches')
 
