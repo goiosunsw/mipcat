@@ -16,12 +16,13 @@ import argparse
 import numpy as np
 import librosa as lr
 import scipy.signal as sig
-from scipy.ndimage.filters import maximum_filter
-from scipy.ndimage.morphology import  binary_erosion
+from scipy.ndimage import maximum_filter
+from scipy.ndimage import binary_erosion
 from sklearn.neighbors import KDTree
 from collections import Counter
 
-DEBUG=False
+DEBUG = False
+EPS = 1e-12
 
 
 def wav_load(filename, sr=None, channel=0, res_type='kaiser_fast'):
@@ -73,6 +74,7 @@ def get_markers(w,sr,twind=0.0464,pkpct=98,frad=60.0,trad=0.3):
     
     fs, ts, ss = sig.spectrogram(w,nfft=nfft,fs=sr,
                                  window=np.hanning(nfft),noverlap=nfft-nhop)
+    ss[ss<EPS] = EPS
     dbss = 10*np.log10(ss)
     #dbmax = np.max(dbss)
     
@@ -189,7 +191,7 @@ def parse_args():
                         help="Number of chunks in delayed file to use for comparison")
     parser.add_argument("-c", "--channel", type=int, default=0,
                         help="Channel number for reference signal")
-    parser.add_argument("-t", "--table", type=int, default=0,
+    parser.add_argument("-t", "--table", action="store_true", 
                         help="Output comma separated file names, delay and number of matches to add to a CSV file")
 
     parser.add_argument("-v", "--verbose", action='store_true',
