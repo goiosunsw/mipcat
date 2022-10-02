@@ -1,15 +1,61 @@
+# Generating article figures
+
+This page refers to the the example dataset that is provided as supporting material for the article
+
+Almeida, A., Li W., Schubert, E., Smith, J. and Wolfe, J. "MIPCAT -- a Music Instrument Performance Capture and Analysis Toolbox"
+
+The dataset contains several performances by 2 professional and 1 amateur musician of the first bars of Mozarts Clarinet Concerto K.622. For the 2 professionals, there are 3 excerpts, 2 played with the customised clarinet from our Laboratory, fitted with sensors and one played with their own clarinet.
+
+For the amateur, only one excerpt is given, but with the original videos. These are meant to show how to use the video feature extraction tools and alignment with other signals. 
+
+The file structure of the dataset is as follows:
+
+
+mozart_sample
+- `channel_desc.yaml`: Description of channels in each `.wav`-file
+- `melodies.yaml`: Note sequence expected in recordings
+- `mozart_notes.csv`: Segmentation of recordings (gathered together)
+- `P5`: Professional player A
+    - `Lab`: Recording with sensor-fitted clarinet
+        - `P5_Mozart_Lab_Front.json`: Clarinet marker positions extracted from front view camera
+        - `P5_Mozart_Lab_Mouthpiece.json`: Mouthpiece covering measurement  
+        - `P5_Mozart_Lab_Side.json`: Clarinet marker positions extracted from side view camera
+        - `P5_Mozart_Lab_ts.pickle`: Time-series extracted from `.wav` file
+        - `P5_Mozart_Lab.wav`: Sensor recordings 
+    - `Own`: Recording with player's own instrument (similar as `Lab` but sensor channels absent and no mouthpiece camera)
+        - `P5_Mozart_Own_Front.json`
+        - `P5_Mozart_Own_Side.json`
+        - `P5_Mozart_Own_ts.pickle`
+        - `P5_Mozart_Own.wav`
+- `P6`: Same structure as `P5`
+    - ...
+- `P10`: Amateur recording
+    - `Lab`
+        - `P10_Mozart_Lab_Front.MP4`
+        - `P10_Mozart_Lab_Mouthpiece.mp4`
+        - `P10_Mozart_Lab_Side.MP4`
+        - `P10_Mozart_Lab.wav`
+
+
+
 # Regenerating intermediate files from sources
+
+All the intermediate data required for plotting the figures in the article are provided in the dataset, however they can be regenerated using the code in this repository and following the recipes below. They involve recalculating sound descriptors and a note-by-note segmentation of the recording.
 
 ## Generate a Time-series
 
-Run
+`_ts.pickle` files contain sound descriptors extracted from the original signals in the `.wav` file. These are mostly calculated with at constant intervals of 10ms. They can be recalculated using: 
+
 ```bash
 python -m mipcat.signal.ts_gen_from_csv single -c ../../channel_desc.yaml -o P5_Mozart_Own_ts.pickle -s ext_only P5_Mozart_Own.wav
 ```
 
 ## Sgment acording to a melody
 
-Run
+Note-by-note segmentation is provided in the file `mozart_notes.csv` in the root of the dataset. The most important data in this file are the start and end times of each note, but the file also includes metadata such as which participant played each note, with which instrument, and the expected note as per the score.
+
+To regenerate this file, first the note-by-note segmentation and excerpt segmentation have to be obtaine for each recording. This is done by aligning the score to the recording, so that knowledge of the score is needed and provided by the file `melodies.yaml`. To obtain a segmentation that can be checked and edited in `praat`, use the following:
+
 ```bash
 python -m mipcat.signal.note_matcher notes -m /opt/conda/lib/python3.10/site-packages/mipcat/resources/melodies.yaml  -t mozart -o P5_Mozart_Own.TextGrid P5_Mozart_Own_ts.pickle
 ```
@@ -24,6 +70,8 @@ Use ***praat***
 
 
 ## Repeat for every recording 
+
+Repeat the 3 above steps for every `.wav` file in the dataset. 
 
 # Video tasks
 
@@ -71,16 +119,10 @@ Repeat for `P10_Mozart_Lab_Side.MP4`
 
 Run
 ```bash
-python -m mipcat.align.align_keypoints -c 5 P10_Mozart_Lab_Front.MP4 P10_Mozart_Lab.WAV
+python -m mipcat.align.align_keypoints -t -c 5 P10/Lab/P10_Mozart_Lab_Front.MP4 P10/Lab/P10_Mozart_Lab.WAV >> wav_video_delays.csv
 ```
 
-This calculates the delay between the `WAV` recording and the video recording, using channel 6 (numbering starts at 0) in the `WAV` file.
-
-A bunch of warnings appear, and the last line should say
-
-`27.813179131929964 sec, 48.29 % matches`
-
-This means that the beginning of the video file is **27.81 seconds** into the `WAV` file
+This calculates the delay between the `WAV` recording and the video recording, using channel 6 (numbering starts at 0) in the `WAV` file and adds a line to the `wav_video_delays.csv` file containing both filenames, the channel, the number of seconds to add to the time into the video file to obtain the time in the signal file, and a number indicating the quality of the audio match.
 
 
 # Collect all the note regions into a general note database
