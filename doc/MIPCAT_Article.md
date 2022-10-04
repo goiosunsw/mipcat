@@ -44,7 +44,7 @@ All the intermediate data required for plotting the figures in the article are p
 
 ## Generate a Time-series
 
-`_ts.pickle` files contain sound descriptors extracted from the original signals in the `.wav` file. These are mostly calculated with at constant intervals of 10ms. They can be recalculated using: 
+`_ts.pickle` files contain sound descriptors extracted from the original signals in the `.wav` file. These are mostly calculated with at constant intervals of 10ms. They can be recalculated by running the following command in a folder with a `.WAV` file, for instance `P5/Lab/`: 
 
 ```bash
 python -m mipcat.signal.ts_gen_from_csv single -c ../../channel_desc.yaml -o P5_Mozart_Own_ts.pickle -s ext_only P5_Mozart_Own.wav
@@ -54,10 +54,10 @@ python -m mipcat.signal.ts_gen_from_csv single -c ../../channel_desc.yaml -o P5_
 
 Note-by-note segmentation is provided in the file `mozart_notes.csv` in the root of the dataset. The most important data in this file are the start and end times of each note, but the file also includes metadata such as which participant played each note, with which instrument, and the expected note as per the score.
 
-To regenerate this file, first the note-by-note segmentation and excerpt segmentation have to be obtaine for each recording. This is done by aligning the score to the recording, so that knowledge of the score is needed and provided by the file `melodies.yaml`. To obtain a segmentation that can be checked and edited in `praat`, use the following:
+To regenerate this file, first the note-by-note segmentation and excerpt segmentation have to be obtaine for each recording. This is done by aligning the score to the recording, so that knowledge of the score is needed and provided by the file `melodies.yaml` in the root folder of the dataset. To obtain a segmentation that can be checked and edited in `praat`, use the following, in the folder with the timeseries generated above (eg `P5/Lab/`):
 
 ```bash
-python -m mipcat.signal.note_matcher notes -m /opt/conda/lib/python3.10/site-packages/mipcat/resources/melodies.yaml  -t mozart -o P5_Mozart_Own.TextGrid P5_Mozart_Own_ts.pickle
+python -m mipcat.signal.note_matcher notes -m ../../melodies.yaml  -t mozart -o P5_Mozart_Own.TextGrid P5_Mozart_Own_ts.pickle
 ```
 
 ## Adjust TextGrid if needed 
@@ -79,7 +79,14 @@ For privacy concerns, only one example is provided with video files. For the rem
 
 ## Adjust mouthpiece video settings
 
-Run
+This step creates a configuration file that selects a reference region in the mouthpiece and a color range matching the green strip in the mouthpiece. 
+
+The reference region should be a unique object that can be followed throughout the whole movie. The number *25* is usually a good choice, as it is usually not covered by the musician's mouth and is distinguishable from other parts of the image. 
+
+For the color range, the hue minimum and maximum values are the most important. They can vary slightly during the video as lighting conditions change, so scan through the movie to make sure that none of the green region is missing. The minimum saturation value can be increased slightly to prevent grey areas from connecting to the detected region. Try different settings to see the effects.
+
+In the folder `P10/Lab`, run:
+
 ```bash
 python -m mipcat.video.mouthpiece_video_gui P10_Mozart_Lab_Mouthpiece.mp4
 ```

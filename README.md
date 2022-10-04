@@ -10,12 +10,20 @@ The project consists of hardware and software modules. This repository mostly or
 - Download (or clone) this repository and decompress it. It should create a `mipcat` folder
 - Change into the `mipcat` folder
 - Run `conda create -n mipcat -f environment.yaml`
+
+# Example: MIPCAT article figure generation
+
+If you're here directed from [1], the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md) 
+
+Download the sample dataset [here](https://cloudstor.aarnet.edu.au/plus/s/1d1oeOAmsJU4nJ2). When prompted, use the password `MIPCAT_unsw2022`
+
 # Workflow
-Everything has to be run inside the `mipcat` environment.
 
-For this workflow, please change folders to the `mipcat` root folder (created when extracting the downloaded archive)
+This section is more generic than the previous one and can in principle be used with different dataset, including, in future, a complete dataset of recordings performed in the context of the ARC research project `DPDP200100963`.
 
-The examples given here use an example data available on [zenodo](https://zenodo.org/deposit/7042528)
+Everything has to be run inside the `mipcat` conda environment.
+
+For this workflow, please change folders to the `mipcat` root folder (created when extracting the code archive)
 
 - Open a terminal in the `mipcat` environment in Anaconda
 or run
@@ -23,10 +31,6 @@ or run
 conda activate mipcat
 ```
 in a command prompt or shell
-
-# Example: MIPCAT article figure generation
-
-Using the example dataset, the figures in the article [1] can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md)
 
 
 ## Create metadata lists
