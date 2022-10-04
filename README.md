@@ -13,9 +13,11 @@ The project consists of hardware and software modules. This repository mostly or
 
 # Example: MIPCAT article figure generation
 
-If you're here directed from [1], the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md) 
+If you read article [1], the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md). 
 
 Download the sample dataset [here](https://cloudstor.aarnet.edu.au/plus/s/1d1oeOAmsJU4nJ2). When prompted, use the password `MIPCAT_unsw2022`
+
+[1] Almeida, A., Li W., Schubert, E., Smith, J. and Wolfe, J. "MIPCAT -- a Music Instrument Performance Capture and Analysis Toolbox"
 
 # Workflow
 
