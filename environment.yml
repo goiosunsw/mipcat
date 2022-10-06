@@ -33,7 +33,7 @@ dependencies:         # everything under this, installed by conda
   - tesseract
   - pytesseract
   - timeseries
-  - pypevoce
+  - pypevoc
   - mipcat
   - pip:                # everything under this, installed by pip
     - future
