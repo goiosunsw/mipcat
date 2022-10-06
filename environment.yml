@@ -32,12 +32,11 @@ dependencies:         # everything under this, installed by conda
   - pysimplegui
   - tesseract
   - pytesseract
+  - timeseries
+  - pypevoce
+  - mipcat
   - pip:                # everything under this, installed by pip
     - future
     - mediapipe
     - tgt
-    - git+https://github.com/goiosunsw/pypevoc
-    - git+https://github.com/goiosunsw/timeseries
-    - git+https://github.com/goiosunsw/mipcat
-
 
