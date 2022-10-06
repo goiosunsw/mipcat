@@ -42,6 +42,12 @@ mozart_sample
 
 All the intermediate data required for plotting the figures in the article are provided in the dataset, however they can be regenerated using the code in this repository and following the recipes below. They involve recalculating sound descriptors and a note-by-note segmentation of the recording.
 
+After creating the mipcat environment as described in the [README file](../README.md), run
+
+```bash
+conda activate mipcat
+```
+
 ## Generate a Time-series
 
 `_ts.pickle` files contain sound descriptors extracted from the original signals in the `.wav` file. These are mostly calculated with at constant intervals of 10ms. They can be recalculated by running the following command in a folder with a `.WAV` file, for instance `P5/Lab/`: 
