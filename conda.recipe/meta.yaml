@@ -33,7 +33,7 @@ requirements:
 
 
 about:
-  home: "https://github.com/goiosunsw/timeseries.git"
+  home: "https://github.com/goiosunsw/mipcat.git"
   license: "GNU Lesser General Public v3 or later (LGPLv3+)"
   license_family: "LGPL"
   license_file: ""
