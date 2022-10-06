@@ -9,7 +9,7 @@ The project consists of hardware and software modules. This repository mostly or
 - Open a conda terminal
 - Download (or clone) this repository and decompress it. It should create a `mipcat` folder
 - Change into the `mipcat` folder
-- Run `conda create -n mipcat -f environment.yaml`
+- Run `conda env create -n mipcat -f environment.yaml`
 
 # Example: MIPCAT article figure generation
 
