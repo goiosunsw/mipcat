@@ -32,6 +32,7 @@ dependencies:         # everything under this, installed by conda
   - pysimplegui
   - tesseract
   - pytesseract
+  - pykalman
   - timeseries
   - pypevoc
   - mipcat
