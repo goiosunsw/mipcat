@@ -12,6 +12,8 @@ The file structure of the dataset is as follows:
 
 
 mozart_sample
+- `wav_list.csv` contains a list of recordings with information about excerpt, subject, channel description...
+- `wav_video_delays.csv` lists the video files corresponding to each recording and their relative delays
 - `channel_desc.yaml`: Description of channels in each `.wav`-file
 - `melodies.yaml`: Note sequence expected in recordings
 - `mozart_notes.csv`: Segmentation of recordings (gathered together)
@@ -20,23 +22,23 @@ mozart_sample
         - `P5_Mozart_Lab_Front.json`: Clarinet marker positions extracted from front view camera
         - `P5_Mozart_Lab_Mouthpiece.json`: Mouthpiece covering measurement  
         - `P5_Mozart_Lab_Side.json`: Clarinet marker positions extracted from side view camera
+        - `P5_Mozart_Lab_Side_Pose.json`: Body landmark positions extracted with MediaPipe
         - `P5_Mozart_Lab_ts.pickle`: Time-series extracted from `.wav` file
         - `P5_Mozart_Lab.wav`: Sensor recordings 
     - `Own`: Recording with player's own instrument (similar as `Lab` but sensor channels absent and no mouthpiece camera)
         - `P5_Mozart_Own_Front.json`
         - `P5_Mozart_Own_Side.json`
+        - `P5_Mozart_Lab_Side_Pose.json`
         - `P5_Mozart_Own_ts.pickle`
         - `P5_Mozart_Own.wav`
 - `P6`: Same structure as `P5`
     - ...
-- `P10`: Amateur recording
+- `P10`: Amateur player P10
     - `Lab`
         - `P10_Mozart_Lab_Front.MP4`
         - `P10_Mozart_Lab_Mouthpiece.mp4`
         - `P10_Mozart_Lab_Side.MP4`
         - `P10_Mozart_Lab.wav`
-
-
 
 # Regenerating intermediate files from sources
 
@@ -50,7 +52,7 @@ conda activate mipcat
 
 ## Generate a Time-series
 
-`_ts.pickle` files contain sound descriptors extracted from the original signals in the `.wav` file. These are mostly calculated with at constant intervals of 10ms. They can be recalculated by running the following command in a folder with a `.WAV` file, for instance `P5/Lab/`: 
+`_ts.pickle` files contain sound descriptors extracted from the original signals in the `.wav` file. These are mostly calculated with at constant intervals of 10ms. They can be recalculated by running the following command in a folder with a `.WAV` file, for instance `mozart_sample_dist/P5/Lab/`: 
 
 ```bash
 python -m mipcat.signal.ts_gen_from_csv single -c ../../channel_desc.yaml -o P5_Mozart_Own_ts.pickle -s ext_only P5_Mozart_Own.wav
@@ -60,7 +62,7 @@ python -m mipcat.signal.ts_gen_from_csv single -c ../../channel_desc.yaml -o P5_
 
 Note-by-note segmentation is provided in the file `mozart_notes.csv` in the root of the dataset. The most important data in this file are the start and end times of each note, but the file also includes metadata such as which participant played each note, with which instrument, and the expected note as per the score.
 
-To regenerate this file, first the note-by-note segmentation and excerpt segmentation have to be obtaine for each recording. This is done by aligning the score to the recording, so that knowledge of the score is needed and provided by the file `melodies.yaml` in the root folder of the dataset. To obtain a segmentation that can be checked and edited in `praat`, use the following, in the folder with the timeseries generated above (eg `P5/Lab/`):
+To regenerate this file, first the note-by-note segmentation and excerpt segmentation have to be obtaine for each recording. This is done by aligning the score to the recording, so that knowledge of the score is needed and provided by the file `melodies.yaml` in the root folder of the dataset. To obtain a segmentation that can be checked and edited in `praat`, use the following, in the folder with the timeseries generated above (eg `mozart_sample_dist/P5/Lab/`):
 
 ```bash
 python -m mipcat.signal.note_matcher notes -m ../../melodies.yaml  -t mozart -o P5_Mozart_Own.TextGrid P5_Mozart_Own_ts.pickle
@@ -83,6 +85,7 @@ Repeat the 3 above steps for every `.wav` file in the dataset.
 
 For privacy concerns, only one example is provided with video files. For the remaining, processed data is provided.
 
+The following commands should be run from the folder corresponding to P10 playing the lab instrument (change into `mozart_sample_dist/P10/Lab`)
 ## Adjust mouthpiece video settings
 
 This step creates a configuration file that selects a reference region in the mouthpiece and a color range matching the green strip in the mouthpiece. 
@@ -91,13 +94,13 @@ The reference region should be a unique object that can be followed throughout t
 
 For the color range, the hue minimum and maximum values are the most important. They can vary slightly during the video as lighting conditions change, so scan through the movie to make sure that none of the green region is missing. The minimum saturation value can be increased slightly to prevent grey areas from connecting to the detected region. Try different settings to see the effects.
 
-In the folder `P10/Lab`, run:
+In the folder `mozart_sample_dist/P10/Lab`, run:
 
 ```bash
 python -m mipcat.video.mouthpiece_video_gui P10_Mozart_Lab_Mouthpiece.mp4
 ```
 
-- Adjust the hue values so that the green strip is easily separated from other detected areas
+- Adjust the hue values so that the green strip is easily separated from other detected areas. Detected areas appear as a blue mask overlapping the image.
 - Slightly increase the minimum saturation
 - Select a rectangle including the number *25* in the video 
 - Activate the *Process* check box
@@ -128,6 +131,17 @@ A file should be created with the name `P10_Mozart_Lab_Front.json` with the posi
 
 Repeat for `P10_Mozart_Lab_Side.MP4`
 
+## Run MediaPipe for body pose landmarks
+
+Run
+
+```bash
+python -m mipcat.video.face.mp_pose_detect -o P10_Mozart_Lab_Side_Pose.pickle -r 270 -g P10_Mozart_Lab_Side.MP4
+```
+
+`-r 270` Tells the script to rotate the frame 270 deg before running pose detection
+`-g` opens a window showing the tracking on the video
+
 # Find the delay between the signal file and the videos
 
 Run
@@ -148,3 +162,18 @@ python -m mipcat.signal.textgrid_collector . > mozart_notes.csv
 
 This generates a CSV file `mozart_notes.csv` with the source testgrid files, the excerpt label and the note label as well as start and end times. 
 
+# Plot in a notebook
+
+For this step the *jupyter notebook* needs to be started in the `mipcat` environment. This can be done in the *Anaconda Navigator* or from the command prompt by running:
+
+```bash
+jupyter notebook
+```
+
+If run from the command-prompt, the command-prompt window needs to remain open while the notebook is being used. 
+
+The notebook is accessed from a web browser, by typing in the location bar
+
+`localhost:8888`
+
+Then look for the `nb` folder from this repository and open `Figure8.ipynb`

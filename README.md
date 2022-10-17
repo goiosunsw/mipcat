@@ -9,7 +9,7 @@ The project consists of hardware and software modules. This repository mostly or
 - Open a conda terminal
 - Download (or clone) this repository and decompress it. It should create a `mipcat` folder
 - Change into the `mipcat` folder
-- Run `conda env create -n mipcat -f environment.yaml`
+- Run `conda env create -n mipcat -f environment.yml`
 
 # Example: MIPCAT article figure generation
 
@@ -21,7 +21,7 @@ Download the sample dataset [here](https://cloudstor.aarnet.edu.au/plus/s/1d1oeO
 
 # Workflow
 
-This section is more generic than the previous one and can in principle be used with different dataset, including, in future, a complete dataset of recordings performed in the context of the ARC research project `DPDP200100963`.
+This section is more generic than the previous one and can in principle be used with different dataset, including, in future, a complete dataset of recordings performed in the context of the ARC research project `DP200100963`.
 
 Everything has to be run inside the `mipcat` conda environment.
 
@@ -29,7 +29,8 @@ For this workflow, please change folders to the `mipcat` root folder (created wh
 
 - Open a terminal in the `mipcat` environment in Anaconda
 or run
-```
+
+```bash
 conda activate mipcat
 ```
 in a command prompt or shell
@@ -41,16 +42,17 @@ in a command prompt or shell
 ### Channel description
 A YAML file containing the description of the channels. Several descriptions may be included if channel configurations changed along the project.
 
-A YAML channel file for the example data exists at `runsheets/channel_desc.yaml`
+A YAML channel file for the example data exists at the root of the dataset folder named `channel_desc.yaml`
+
 ### List of recordings
 A CSV file containing a list of recordings, with subject IDs, channel configuration sets, and music scores corresponding to the recording
 
-An example CSV file is given at `runsheets/wav_list.csv`
+An example CSV file is given, named `wav_list.csv`
 
 ### Music scores
 A YAML file with music scores
 
-An example score file is given at `runsheets/melodies.yaml`
+An example score file is given, named `melodies.yaml`
 
 ## Auto-generate descriptor time-series
 Documentation of time-series generation scripts: [[Time-series generation]]
