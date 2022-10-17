@@ -68,7 +68,8 @@ class ArucoTracker(object):
        This class adds similarity tracking whenever a previous
        Aruco tag cannot be found in the current frame.
     """
-    def __init__(self, vidfile, from_time=0.0, to_time=None, progress=False, forget_time=1.0):
+    def __init__(self, vidfile, from_time=0.0, to_time=None, progress=False, forget_time=1.0, 
+                 crop=None):
         """Initialize tracker with a video file
 
         Args:
@@ -99,6 +100,7 @@ class ArucoTracker(object):
         self.cert_templates = {}
         self.last_bbox = {}
         self.cert_bbox = {}
+        self.crop=crop
         
         self.set_source(vidfile, from_time=from_time, to_time=to_time)
         
@@ -125,6 +127,11 @@ class ArucoTracker(object):
     def get_next_frame(self):
         ret, image = self.cap.read()
         self.cur_time = self.cap.get(cv2.CAP_PROP_POS_MSEC)/1000.0
+        if self.crop:
+            try:
+                image = image[crop[0]:crop[2],crop[1]:crop[3]]
+            except TypeError:
+                pass
         return ret, image
         
     def aruco_detect(self,image):
@@ -254,6 +261,8 @@ def parse_args():
                         help="start time in seconds")
     parser.add_argument("-e", "--end_sec", type=float, default=0.0,
                         help="end time in seconds")
+    parser.add_argument("-c", "--crop", default="", 
+                        help="crop rectangle XL:YB:XR:YT (default = no crop)")
     parser.add_argument("-o", "--output", default="", 
                         help="output file (leave empty for same name as video)")
 
@@ -273,7 +282,13 @@ if __name__ == '__main__':
     else:
         output = args.output 
 
-    trk = ArucoTracker(vidfile, from_time=args.start_sec,to_time=end_time,progress=True)
+    if len(args.crop)>0:
+        crop = [int(x) for x in args.crop.split(':')]
+        print('cropping to ',crop)
+    else:
+        crop=None
+
+    trk = ArucoTracker(vidfile, from_time=args.start_sec,to_time=end_time,progress=True, crop=crop)
     try:
         trk.run()
     except AttributeError:
