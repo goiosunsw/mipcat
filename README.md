@@ -79,7 +79,7 @@ Video time-series are not provided for our main participants for ethics reasons.
 #### Color and reference calibration
 The analysis of mouthpiece covering requires calibration of the color range in which the green strip is found and a reference in the scale (usually the number 25). Calibration is done using the GUI: run
 ```bash
-python -m mipcat.video.mouthpiece_gui data/S0/S0_Mozart_Mouthpiece.mp4
+python -m mipcat.video.mouthpiece_video_gui data/S0/S0_Mozart_Mouthpiece.mp4
 ```
 - The most important setting are the top and bottom values of the Hue. 
 - Provide a rectangular selection of the scale reference or click "find template" for an automated attempt.
@@ -88,7 +88,7 @@ python -m mipcat.video.mouthpiece_gui data/S0/S0_Mozart_Mouthpiece.mp4
 
 #### Run the analysis
 ```bash
-python -m mipcat.video.mouthpiece_template data/S0/S0_Mozart_Mouthpiece.mp4
+python -m mipcat.video.mouthpiece_tracker data/S0/S0_Mozart_Mouthpiece.mp4
 ```
 This will generate a JSON file with the the analysis of exposed green area for each frame.
 
@@ -107,14 +107,14 @@ Documentation of segmentation scripts: [[Segmentation]]
 
 To segment all recordings declared in the CSV, directed by a musical score:
 ```bash
-python -m mipcat.segment.segment runsheets/wav_list.csv -o output/ -m runsheets/melodies.yaml
+python -m mipcat.signal.note_matcher notes runsheets/wav_list.csv -o output/ -m runsheets/melodies.yaml
 ```
 
 [Praat](https://www.fon.hum.uva.nl/praat/) TextGrid files are generated for each recording. These can be adjusted in Praat to correct for wrongly detected notes
 
 ## Note features
-The next step is to extract note features and build a note database
+The next step is to aggregate note features and build a note database
 
 ```bash
-python -m mipcat.db.build runsheets/wav_list.csv -i 
+python -m mipcat.signal.build_note_database runsheets/wav_list.csv -i 
 ```
