@@ -6,6 +6,7 @@ import tkinter as tk
 import numpy as np
 import json
 import traceback
+import argparse
 from numpy import sqrt, ones, array
 from tkinter import ttk
 from tkinter.messagebox import showinfo
@@ -87,7 +88,7 @@ class CVImage(tk.Canvas):
 
 
 class CVVideo(tk.Frame, MouthpieceTracker):
-    def __init__(self, parent, video_file=None, *args, **kwargs):
+    def __init__(self, parent, video_file=None, conf=None, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         MouthpieceTracker.__init__(self,*args, **kwargs)
         self.do_process = False
@@ -113,14 +114,15 @@ class CVVideo(tk.Frame, MouthpieceTracker):
         self.image_container.bind("<ButtonRelease-1>", self.__stop)
 
         if video_file:
-            self.set_video(video_file)
+            self.set_video(video_file, conf=conf)
 
-    def set_video(self,video_file):
-        conffile = os.path.splitext(video_file)[0]+'_conf.json'
+    def set_video(self,video_file,conf=None):
+        if conf is None:
+            conf = os.path.splitext(video_file)[0]+'_conf.json'
         self.set_video_source(video_file=video_file)
         self.position.configure(to=self.max_time)
         try:
-            self.read_config(conffile)
+            self.read_config(conf)
         except Exception:
             traceback.print_exc()
         self.show()
@@ -331,10 +333,11 @@ class PushButtons(tk.Frame):
 
 
 class App(tk.Tk):
-    def __init__(self, video_file):
+    def __init__(self, video_file,conf=None):
         super().__init__()
 
         self.video_file = video_file
+        self.config = None
         
         # configure the root window
         self.title('Mouthpiece configurator')
@@ -366,7 +369,7 @@ class App(tk.Tk):
         self.statusbar = tk.Label(self, text="Ready", bd=1, relief=tk.SUNKEN, anchor=tk.W)
         self.statusbar.pack(side=tk.BOTTOM, fill=tk.X)
 
-        self.video_container.set_video(video_file)
+        self.video_container.set_video(video_file, conf=conf)
         self.hsv_controls.from_processor(self.video_container)
 
     def hsv_change(self, event):
@@ -413,7 +416,15 @@ class App(tk.Tk):
     def show_template(self, cv_image):
         self.push_buttons.show_image(cv_image)
 
+def parse_args():
+    ap = argparse.ArgumentParser()
+    
+    ap.add_argument("filename", help="video file name")
+    ap.add_argument("-c", "--config", 
+                        help="config file")
+    return ap.parse_args()
 
 if __name__ == "__main__":
-    app = App(sys.argv[1])
+    args = parse_args()
+    app = App(args.filename, conf=args.config)
     app.mainloop()
