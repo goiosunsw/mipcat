@@ -5,7 +5,7 @@ def no_crop_rotate(image, angle, scale=1.0):
     height, width = image.shape[:2] # image shape has 3 dimensions
     image_center = (width/2, height/2) # getRotationMatrix2D needs coordinates in reverse order (width, height) compared to shape
 
-    rotation_mat = cv2.getRotationMatrix2D(image_center, angle, 1.)
+    rotation_mat = cv2.getRotationMatrix2D(image_center, angle, scale)
 
     # rotation calculates the cos and sin, taking absolutes of those.
     abs_cos = abs(rotation_mat[0,0]) 
@@ -46,11 +46,11 @@ def calc_inner_rect(rotated_rect):
 
 def rotate_image(image, angle_deg, scale=1.0):
     h, w = np.asarray(image.shape[:2])
-    imrot, cent = no_crop_rotate(image, angle_deg)
+    imrot, cent = no_crop_rotate(image, angle_deg, scale=scale)
     hr, wr = imrot.shape[:2]
-    #cent = (wr//2,hr//2)
+    cent = (wr//2,hr//2)
     
-    rot_rect = (cent, (w,h), angle_deg)
+    rot_rect = (cent, (w*scale,h*scale), angle_deg)
     inner_rect = calc_inner_rect(rot_rect)
     crop = inner_rect[0], inner_rect[1]
     return imrot[inner_rect[1]:inner_rect[1]+inner_rect[3],
@@ -83,28 +83,58 @@ def template_track_rot(image, template, rot=0.0, rot_tol=5.0, template_method=cv
 
 
 class MultiAngleTemplateTracker(object):
-    def __init__(self, template=None, angle_step=30):
+    def __init__(self, template=None, angle_step=30, size_fact=2, n_size=1):
+        self.angle_pool = np.arange(angle_step-180,180,angle_step).astype('f')
+        if n_size>1:
+            n_size = int(np.floor(n_size/2)*2+1)
+            self.size_pool = np.logspace(-np.log10(size_fact), np.log10(size_fact), n_size)
+        else:
+            self.size_pool = np.array([1.0])
         if template is not None:
             self.set_template(template)    
-        self.angle_step = angle_step
 
     def set_template(self, template):
         self.template = template
         self.rot_templates = []
         self.crops = []
-        self.angles = [angle for angle in range(0,360,self.angle_step)]
-        for angle in self.angles:
-            templ, crop = rotate_image(self.temaplate, angle)
-            self.rot_templates.append(templ)
-            self.crops.append(crop)
+        self.angles = []
+        self.sizes = []
+        for angle in self.angle_pool:
+            for size in self.size_pool:
+                templ, crop = rotate_image(self.template, angle, scale=size)
+                self.rot_templates.append(templ)
+                self.crops.append(crop)
+                self.angles.append(angle)
+                self.sizes.append(size)
 
     def match(self, img):
         vals = []
-        poss = [] 
+        cents = [] 
         for templ, crop in zip(self.rot_templates, self.crops):
+            shp = templ.shape
             val, pos = template_track(img, templ)
             vals.append(val)
-            poss.append([p-c for p,c in zip(pos,crop)])
+            cents.append([pos[0]+shp[1]/2,pos[1]+shp[0]/2])
             
-        pos, angle, val = max(zip(poss, self.angles, vals), key=lambda x: x[2]) 
-        return pos, angle
+        cent, angle, size, val = max(zip(cents, self.angles, self.sizes, vals), key=lambda x: x[3]) 
+        self.found_index = vals.index(val)
+
+        self.cent = cent
+        self.size = size
+        self.angle = -angle
+        self.val = val
+
+        return cent, angle
+    
+    @property
+    def shape(self):
+        shp = self.template.shape
+        return np.array([shp[1], shp[0]])
+    
+    @property
+    def rect(self):
+        return (self.cent, self.shape*self.size, self.angle)
+
+    @property
+    def found_template(self):
+        return self.rot_templates[self.found_index]
