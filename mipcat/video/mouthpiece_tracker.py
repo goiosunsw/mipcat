@@ -4,6 +4,8 @@ import numpy as np
 import cv2
 from .mouthpiece_process import FrameProcessor
 from .template_trackers import template_track_rot
+from .template_trackers import MultiAngleTemplateTracker
+from . import template_trackers
 
 def rect_angle(rot_rect):
     """Convert rotated rect angle (up to 90 deg) to 180 deg angle
@@ -21,17 +23,44 @@ def rect_angle(rot_rect):
     return xangle
 
 class MouthpieceTracker(FrameProcessor):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, nbr_templates_every=30, *args, **kwargs ):
         super().__init__(*args, **kwargs)
         self.template_rect = None
         self.template_time = 0.0
 
         self.has_template_config = False
+        self.nbr_templates_every = nbr_templates_every
+        if self.nbr_templates_every:
+            self.load_nbr_templates()
+        self.last_nbr_template_time = -1000
+        
+    def load_nbr_templates(self):
+        
+        use_templates = ['template_20.png','template_25.png','template_30.png']
+
+        base_templ_path = '/'.join(os.path.abspath(template_trackers.__file__).split('\\')[:-2])+'/resources/'
+        templ_fn = [base_templ_path + t for t in use_templates]
+        self.nbr_templates = [cv2.imread(tt) for tt in templ_fn]
+        self.nbr_names = use_templates
+
+    def detect_nbrs(self, img):
+        rects = []
+        vals = []
+        angles = []
+        for template in self.nbr_templates:
+            h, w = template.shape[:2]
+            trk = MultiAngleTemplateTracker(template, angle_step=15, size_fact=1.3, n_size=5)
+            cent, angle = trk.match(img)
+            cent = [int(c) for c in cent]
+            rects.append([int(cent[0]-w/2), int(cent[1]-h/2), w, h])
+            vals.append(trk.val)
+            angles.append(angle)
+        return rects, vals, angles
 
     def set_template_from_time(self, rect, time=0.0):
         self.template_rect = rect
         self.template_time = time
-        img = self.get_frame(time=time)
+        ret, img = self.get_frame(time=time)
         self.template = img[rect[1]:rect[1]+rect[3], 
                             rect[0]:rect[0]+rect[2]]
         self.has_template_config = True
@@ -101,6 +130,17 @@ class MouthpieceTracker(FrameProcessor):
             self.find_template(img)
             self.crop_strip(self.templ_cent, self.line_angle)
             self.measure()
+            
+        self.this_res = {'area':int(self.area),
+                         'filled_area':int(self.filled_area),
+                         'minRect':self.new_rect}
+
+        if self.time-self.last_nbr_template_time > self.nbr_templates_every:
+            self.last_nbr_template_time = self.time
+            rects, vals, angles = self.detect_nbrs(img)
+            self.this_res['other_rects'] =  {nn:{'rect': rect, 'val': float(val), 'angle': float(angle)} 
+                                             for nn,rect, val, angle in zip(self.nbr_names, 
+                                                                    rects, vals, angles)}
 
     def image_results(self):
         ims = super().image_results()
