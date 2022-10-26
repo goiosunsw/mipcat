@@ -19,18 +19,28 @@ DEFAULT_CONF = {
 
 FILE_PATTERN = r'.*endoscope.*\.mp4'
 
-templ_fn = '/'.join(os.path.abspath(template_trackers.__file__).split('\\')[:-2])+'/resources/template_25.png'
-template = cv2.imread(templ_fn)
-h, w = template.shape[:2]
+use_templates = ['template_20.png','template_25.png','template_30.png']
+
+base_templ_path = '/'.join(os.path.abspath(template_trackers.__file__).split('\\')[:-2])+'/resources/'
+templ_fn = [base_templ_path + t for t in use_templates]
+templates = [cv2.imread(tt) for tt in templ_fn]
+for nn, tt in zip(use_templates,templates):
+    print(tt.shape)
 
 def find_template(file):
     cap =  cv2.VideoCapture(cv2.samples.findFile(file))
     ret, img = cap.read()
     print(img.shape)
-    trk = template_trackers.MultiAngleTemplateTracker(template, angle_step=15, size_fact=1.3, n_size=5)
-    cent, angle = trk.match(img)
-    cent = [int(c) for c in cent]
-    return [int(cent[0]-w/2), int(cent[1]-h/2), w, h]
+    rects = []
+    vals = []
+    for template in templates:
+        h, w = template.shape[:2]
+        trk = template_trackers.MultiAngleTemplateTracker(template, angle_step=15, size_fact=1.3, n_size=5)
+        cent, angle = trk.match(img)
+        cent = [int(c) for c in cent]
+        rects.append([int(cent[0]-w/2), int(cent[1]-h/2), w, h])
+        vals.append(trk.val)
+    return rects, vals
 
 def parse_args():
     ap = argparse.ArgumentParser()
@@ -47,11 +57,11 @@ if __name__ == "__main__":
     outdir = args.output
     if outdir[-1] != os.path.sep:
         outdir += os.path.sep
-    print(template.shape)
     for root, dirs, files in os.walk(args.root):
         for filename in files:
             path = os.path.join(root,filename)
             if re.match(FILE_PATTERN, path.lower()):
+                print(path)
                 jsfile = os.path.splitext(path)[0]+'_conf.json'
                 try:
                     with open(jsfile,'r') as f:
@@ -62,12 +72,15 @@ if __name__ == "__main__":
                             newjs[k] = v
                 except IOError:
                     newjs = DEFAULT_CONF
-                if "rect" not in newjs:
-                    try:
-                        rect = find_template(path)
+                try:
+                    rects, vals = find_template(path)
+                    rect = rects[0]
+                    if "rect" not in newjs:
                         newjs["rect"] = [[rect[0],rect[1]],[rect[0]+rect[2],rect[1]+rect[3]]]
-                    except AttributeError:
-                        print("could not read "+path)
+                    newjs["other_rects"] = {nn:{'rect': rect, 'val': val} 
+                                            for nn,rect, val in zip(use_templates, rects, vals)}
+                except AttributeError:
+                    print("could not read "+path)
                 thisoutdir = root.replace(args.root, outdir)
                 newjsfile = os.path.splitext(filename)[0]+'_conf.json'
                 outfile = os.path.join(thisoutdir, newjsfile)
