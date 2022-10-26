@@ -211,9 +211,10 @@ class FrameProcessor(object):
         if time is not None:
             self.cap.set(cv2.CAP_PROP_POS_MSEC, int(time*1000))
         ret, self.img = self.cap.read()
+        self.time = self.cap.get(cv2.CAP_PROP_POS_MSEC)/1000.
         if not ret:
             print("Error reading frame number ", pos)
-        return self.img
+        return ret, self.img
 
     def image_results(self):
         mm = self.final_mask
@@ -251,13 +252,16 @@ class FrameProcessor(object):
 
     def process(self, img):
         if img is None:
-            self.img = self.get_frame()
+            ret, self.img = self.get_frame()
         else:
             self.img = img
         self.color_convert()
         self.find_green_strip()
         
         self.measure()
+        self.this_res = {'area':int(self.area),
+                         'filled_area':int(self.filled_area),
+                         'minRect':self.new_rect}
         
     def run(self, n=None):
         if n is None:
@@ -266,16 +270,13 @@ class FrameProcessor(object):
         if self.progress:
             self.pbar = tqdm(total=self.n_frames)
         for ii in range(n):
-            ret, image = self.cap.read()
+            ret, image = self.get_frame()
             if not ret:
                 self.pbar.write(f'Error reading frame {ii}. Skipping')
                 continue
-            msec = self.cap.get(cv2.CAP_PROP_POS_MSEC)
             self.process(image)
-            self.results.append({'time':msec/1000,
-                                 'area':int(self.area),
-                                 'filled_area':int(self.filled_area),
-                                 'minRect':self.new_rect})
+            self.this_res['time'] = self.time
+            self.results.append(self.this_res)
             if self.progress:
                 self.pbar.update()
         if self.progress:
