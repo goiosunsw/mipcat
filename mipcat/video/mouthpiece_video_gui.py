@@ -337,7 +337,7 @@ class App(tk.Tk):
         super().__init__()
 
         self.video_file = video_file
-        self.config = None
+        self.config = conf
         
         # configure the root window
         self.title('Mouthpiece configurator')
@@ -391,7 +391,10 @@ class App(tk.Tk):
 
         elif element == "write":
             js = self.video_container.config_to_json()
-            outfile = os.path.splitext(self.video_file)[0]+'_conf.json'
+            if self.config:
+                outfile = self.config
+            else:
+                outfile = os.path.splitext(self.video_file)[0]+'_conf.json'
             with open(outfile,'w') as f:
                 json.dump(js, f)
                 self.send_status('Config written to {}'.format(outfile))
