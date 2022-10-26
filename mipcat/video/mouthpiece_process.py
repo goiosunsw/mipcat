@@ -13,6 +13,7 @@
 import os
 import argparse
 import json
+import pickle
 import traceback
 import numpy as np
 import scipy.signal as sig
@@ -296,6 +297,12 @@ class FrameProcessor(object):
             with open(os.path.splitext(self.video_file)[0]+'_mp_video_analysis.json','w') as f:    
                 json.dump(self.results,f,cls=NumpyEncoder)
 
+    def to_pickle(self, filename=None):
+        if filename is None:
+            filename = os.path.splitext(self.video_file)[0]+'_mp_video_analysis.pickle'
+        with open(filename,'w') as f:
+            pickle.dump(self.results, f)
+                
 def argument_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", help="movie filename")
