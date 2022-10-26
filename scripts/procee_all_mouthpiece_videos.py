@@ -10,7 +10,7 @@ def process_file(video_file, config, output_file):
     processor.set_video_source(args.filename)
     processor.read_config(config)
     processor.run()
-    processor.to_json(output_file)
+    processor.to_pickle(output_file)
 
 def parse_args():
     ap = argparse.ArgumentParser()
@@ -37,5 +37,6 @@ if __name__ == "__main__":
         cfg_fn = os.path.splitext(row.filename)[0] + "_conf.json"
         output_fn = os.path.splitext(row.filename)[0] + "_results.pickle"
         config_path = f"{args.output}/{row.subj_dir}/{row.view}/{cfg_fn}"
+        output_path = f"{args.output}/{row.subj_dir}/{row.view}/{output_fn}"
         
-        process_file(video_path, config=config_path)
+        process_file(video_path, config=config_path, output_file=output_path)
