@@ -38,7 +38,7 @@ class MouthpieceTracker(FrameProcessor):
         
         use_templates = ['template_20.png','template_25.png','template_30.png']
 
-        base_templ_path = '/'.join(os.path.abspath(template_trackers.__file__).split('\\')[:-2])+'/resources/'
+        base_templ_path = '/'.join(os.path.abspath(template_trackers.__file__).split(os.path.sep)[:-2])+'/resources/'
         templ_fn = [base_templ_path + t for t in use_templates]
         self.nbr_templates = [cv2.imread(tt) for tt in templ_fn]
         self.nbr_names = use_templates

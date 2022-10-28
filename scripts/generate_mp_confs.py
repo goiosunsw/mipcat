@@ -19,9 +19,11 @@ DEFAULT_CONF = {
 
 FILE_PATTERN = r'.*endoscope.*\.mp4'
 
-use_templates = ['template_20.png','template_25.png','template_30.png']
+use_templates = ['template_25.png','template_20.png','template_30.png']
 
-base_templ_path = '/'.join(os.path.abspath(template_trackers.__file__).split('\\')[:-2])+'/resources/'
+sep = os.path.sep
+
+base_templ_path = '/'.join(os.path.abspath(template_trackers.__file__).split(sep)[:-2])+'/resources/'
 templ_fn = [base_templ_path + t for t in use_templates]
 templates = [cv2.imread(tt) for tt in templ_fn]
 for nn, tt in zip(use_templates,templates):

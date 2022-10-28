@@ -152,8 +152,14 @@ class FrameProcessor(object):
         
     def crop_strip(self, origin_pt, angle):
         h, w = self.img.shape[:2]
-        pt1 = (0,origin_pt[1]-origin_pt[0]*np.tan(angle))
-        pt2 = (w,origin_pt[1]+(w-origin_pt[0])*np.tan(angle))
+        lpt = origin_pt[1]-origin_pt[0]*np.tan(angle)
+        rpt = origin_pt[1]+(w-origin_pt[0])*np.tan(angle)
+        if rpt<0 or lpt>h:
+            pt1 = (origin_pt[0]-origin_pt[1]/np.tan(angle),0)
+            pt2 = (origin_pt[0]+(h-origin_pt[1])/np.tan(angle),h)
+        else:
+            pt1 = (0,lpt)
+            pt2 = (w,rpt)
         #print(h,w,angle,pt1,pt2)
         pts = np.array([[pt] for pt in [(0,0), pt1, pt2, (w,0)]]).astype('i')
         crop_mask = np.zeros((h,w),dtype='uint8')
@@ -300,7 +306,7 @@ class FrameProcessor(object):
     def to_pickle(self, filename=None):
         if filename is None:
             filename = os.path.splitext(self.video_file)[0]+'_mp_video_analysis.pickle'
-        with open(filename,'w') as f:
+        with open(filename,'wb') as f:
             pickle.dump(self.results, f)
                 
 def argument_parse():

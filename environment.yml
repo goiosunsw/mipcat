@@ -35,7 +35,7 @@ dependencies:         # everything under this, installed by conda
   - pykalman
   - timeseries
   - pypevoc
-  - mipcat
+    #  - mipcat
   - pip:                # everything under this, installed by pip
     - future
     - mediapipe
