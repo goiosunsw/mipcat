@@ -155,7 +155,14 @@ def segment_notes_in_timeseries(fts, ats, median_filter_wind_sec=0.1,
         """
     amp = ats.v
     f0 = fts.v
-    assert(len(fts.v)==len(ats.v))
+    try:
+        assert(len(fts.v)==len(ats.v))
+    except AssertionError:
+        if len(fts.v)<len(ats.v):
+            ats = SampledTimeSeries(t=fts.t, v=ats[fts.t])
+        else:
+            fts = SampledTimeSeries(t=ats.t, v=fts[ats.t])
+            
 
     adb = 20*np.log10(amp)
     
