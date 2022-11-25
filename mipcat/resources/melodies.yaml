@@ -411,7 +411,7 @@ ravel:
     bar_duration: 3
     notes:
         - duration: 1.0
-          pitch: E5
+          pitch: F#5
           strong_beat: true
         - duration: 1.0
           pitch: B5
@@ -428,7 +428,7 @@ ravel:
         - duration: 1.0
           pitch: C#6
         - duration: 1.0
-          pitch: C6
+          pitch: A5
         - duration: 1.0
           pitch: E5
         - duration: 1.5
