@@ -203,9 +203,9 @@ def pickle_results(result_list, output=''):
         
 def pose_detect_on_file(filename, rotate=0, position_msec = 0.0):
     # For video input:
-    cap = cv2.VideoCapture(cv2.samples.findFile(video_file))
+    cap = cv2.VideoCapture(cv2.samples.findFile(filename))
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    cap.set(cv2.CAP_PROP_POS_MSEC, pos_msec)
+    cap.set(cv2.CAP_PROP_POS_MSEC, position_msec)
     n=0
 
     result_list = []
@@ -220,12 +220,12 @@ def pose_detect_on_file(filename, rotate=0, position_msec = 0.0):
         for ii in trange(n_frames):
             success, image = cap.read()
             time = cap.get(cv2.CAP_PROP_POS_MSEC)
-            if args.rotate != 0:
-                if args.rotate == 90:
+            if rotate != 0:
+                if rotate == 90:
                     rot = cv2.ROTATE_90_CLOCKWISE
-                elif args.rotate == 180:
+                elif rotate == 180:
                     rot = cv2.ROTATE_180
-                elif args.rotate == 270:
+                elif rotate == 270:
                     rot = cv2.ROTATE_90_COUNTERCLOCKWISE
                 else:
                     print('wrong rotation value!')

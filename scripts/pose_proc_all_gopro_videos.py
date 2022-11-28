@@ -3,12 +3,12 @@ import json
 import os
 import re
 import pandas as pd
-from mipcat.video.face.mp_pose_detect import pose_detect_on_file
+from mipcat.video.face.mp_pose_detect import pose_detect_on_file, pickle_results
 
 def process_file(video_file, output_file, rotate=0, crop=None):
     print(video_file)
-    pose_detect_on_file(video_file, rotate=rotate)    
-    pickle_results(result_list, output_file)
+    results = pose_detect_on_file(video_file, rotate=rotate)    
+    pickle_results(results, output_file)
 
 def parse_args():
     ap = argparse.ArgumentParser()
@@ -36,11 +36,9 @@ if __name__ == "__main__":
         if row['view'] == 'Side':
             rot=270
         video_path = f"{args.root}/{row.subj_dir}/{gpdir}/{row['view']}/{row.filename}"
-        output_fn = os.path.splitext(row.filename)[0] + "_markers.pickle"
+        output_fn = os.path.splitext(row.filename)[0] + "_pose.pickle"
         output_path = f"{args.output}/{row.subj_dir}/{gpdir}/{row['view']}/{output_fn}"
         
         crop = None
-        if row['view'] == 'Side':
-            crop = [300,0,2000,2000]
 
         process_file(video_path,  output_file=output_path, rotate=rot, crop=crop)
