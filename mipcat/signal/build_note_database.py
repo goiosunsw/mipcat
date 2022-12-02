@@ -2,6 +2,7 @@ import os
 import re
 import logging
 import argparse
+import pickle
 import tgt
 import traceback
 import yaml
@@ -10,7 +11,7 @@ import pandas
 import librosa as lr
 from scipy.io import wavfile
 
-from timeseries import SampledTimeSeries 
+from timeseries import SampledTimeSeries, TimeSeries 
 #import timeseries_generator as tsg
 from . import timeseries_generator as tsg
 
@@ -40,9 +41,9 @@ def _base_stats_real(ts, tst, tend):
     rdict[f"{label}_var"] = iqr(ts, from_time=tst, to_time=tend)
     t, v = ts.times_values_in_range(from_time=tst, to_time=tend)
     try:
-        p = np.polyfit(t, v, 1)
+        p = np.polyfit(t-np.min(t), v, 1)
         rdict[f"{label}_trend"] = p[0]
-    except np.linalg.LinAlgError:
+    except (np.linalg.LinAlgError, SystemError):
         pass
     rdict[f"{label}_max_t"] = ts.max_time(from_time=tst, to_time=tend)
     rdict[f"{label}_max_v"] = ts.max(from_time=tst, to_time=tend)
@@ -68,7 +69,7 @@ def _base_stats_angle(ts, tst, tend):
     rdict[f"{label}_var"] = iqr(ts_cent, from_time=tst, to_time=tend) 
     t, v = ts_cent.times_values_in_range(from_time=tst, to_time=tend)
     try:
-        p = np.polyfit(t, v, 1)
+        p = np.polyfit(t-np.min(t), v, 1)
         rdict[f"{label}_trend"] = p[0]
     except np.linalg.LinAlgError:
         pass
@@ -125,6 +126,12 @@ def get_sounding_boundaries(allts, tst, tend, context_sec=0.2):
                                    to_time=tend+context_sec,interp='nearest')
     return sst, cdown[0]
 
+    
+def read_mouthpiece_ts(filename):
+    with open(filename,'rb') as f:
+        data = pickle.load(f)
+    return TimeSeries(t=data['t'], v=data['v'], label='mpcover')
+
 def process_notes_in_file(filedict, eg_tier='clip', note_tier='note', 
                           sounding_context_sec=0.2):
     allnotes = []
@@ -137,6 +144,12 @@ def process_notes_in_file(filedict, eg_tier='clip', note_tier='note',
 
     basename = os.path.splitext(wfile)[0]
     ts = tsg.ts_from_pickle(basename+'_ts.pickle')
+    mpts_path = basename+'_mouthpiece_ts.pickle'
+    try:
+        tsmp = read_mouthpiece_ts(mpts_path)
+        ts.append(tsmp)
+    except FileNotFoundError:
+        print(f"Not found {mpts_path}")
     try:
         instrument = filedict['instrument']
     except KeyError:
