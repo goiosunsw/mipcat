@@ -157,11 +157,13 @@ class FrameProcessor(object):
         if rpt<0 or lpt>h:
             pt1 = (origin_pt[0]-origin_pt[1]/np.tan(angle),0)
             pt2 = (origin_pt[0]+(h-origin_pt[1])/np.tan(angle),h)
+            pts = [(0,0), pt1, pt2, (0,h)]
         else:
             pt1 = (0,lpt)
             pt2 = (w,rpt)
+            pts = [(0,0), pt1, pt2, (w,0)]
         #print(h,w,angle,pt1,pt2)
-        pts = np.array([[pt] for pt in [(0,0), pt1, pt2, (w,0)]]).astype('i')
+        pts = np.array([[pt] for pt in pts]).astype('i')
         crop_mask = np.zeros((h,w),dtype='uint8')
         cv2.fillPoly(crop_mask, [pts] ,255)
         #ret, crop_mask = cv2.threshold(crop_mask, 128, 255, cv2.THRESH_BINARY)
