@@ -34,17 +34,18 @@ RUN pip install \
 
 RUN mkdir mipcat
 RUN mkdir mipcat/Devel
-RUN cd /mipcat/Devel
+
+WORKDIR "/mipcat/Devel"
 
 RUN git clone https://github.com/goiosunsw/timeseries
 RUN git clone https://github.com/goiosunsw/pypevoc
 RUN git clone https://github.com/goiosunsw/mipcat
 
-RUN cd /mipcat/Devel/timeseries
+WORKDIR "/mipcat/Devel/pypevoc"
 RUN pip install -e .
-RUN cd /mipcat/Devel/pypevoc
+WORKDIR "/mipcat/Devel/timeseries"
 RUN pip install -e .
-RUN cd /mipcat/Devel/mipcat
+WORKDIR "/mipcat/Devel/mipcat"
 RUN pip install -e .
 
 EXPOSE 8888
