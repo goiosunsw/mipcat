@@ -189,5 +189,8 @@ if __name__ == "__main__":
     processor.set_video_source(args.filename, from_time=args.start_sec, to_time=end_time)
     processor.read_config(color_range_json_file)
     processor.run()
-    processor.to_json(output)
+    if os.path.splitext(output)[1].lower() == '.pickle':
+        processor.to_pickle(output)
+    else:
+        processor.to_json(output)
 

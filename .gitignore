@@ -3,5 +3,6 @@
 *.pyc
 *.py.un~
 *~
+*.uuid
 
 collection/timeseries_generator.py.bak

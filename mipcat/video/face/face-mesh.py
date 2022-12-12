@@ -60,7 +60,7 @@ with mp_face_mesh.FaceMesh(
             connection_drawing_spec=mp_drawing_styles
             .get_default_face_mesh_iris_connections_style())
     # Flip the image horizontally for a selfie-view display.
-    cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))
+    cv2.imshow('MediaPipe Face Mesh', image)
     if cv2.waitKey(5) & 0xFF == 27:
       break
 cap.release()

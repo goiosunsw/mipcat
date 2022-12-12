@@ -212,7 +212,7 @@ class FrameProcessor(object):
         self.n_frames = length
         #self.init_references()
         #self.process(img)
-        self.img = self.get_frame()
+        ret, self.img = self.get_frame()
 
     def get_frame(self, pos=None, time=None):
         if pos is not None:

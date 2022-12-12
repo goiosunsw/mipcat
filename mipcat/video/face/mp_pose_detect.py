@@ -200,6 +200,81 @@ def pickle_results(result_list, output=''):
     with open(output, 'wb') as f:
         pickle.dump(result_list,f)
 
+        
+def pose_detect_on_file(filename, rotate=0, position_msec = 0.0):
+    # For video input:
+    cap = cv2.VideoCapture(cv2.samples.findFile(filename))
+    n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap.set(cv2.CAP_PROP_POS_MSEC, position_msec)
+    n=0
+
+    result_list = []
+
+    with mp_pose.Pose(
+        min_detection_confidence=0.5,
+        min_tracking_confidence=0.5,
+        model_complexity=2,
+        smooth_landmarks=False) as pose:
+
+        # while cap.isOpened():
+        for ii in trange(n_frames):
+            success, image = cap.read()
+            time = cap.get(cv2.CAP_PROP_POS_MSEC)
+            if rotate != 0:
+                if rotate == 90:
+                    rot = cv2.ROTATE_90_CLOCKWISE
+                elif rotate == 180:
+                    rot = cv2.ROTATE_180
+                elif rotate == 270:
+                    rot = cv2.ROTATE_90_COUNTERCLOCKWISE
+                else:
+                    print('wrong rotation value!')
+                    exit(1)
+
+                image = cv2.rotate(image, rot)
+
+            if not success:
+                print("Ignoring empty camera frame.")
+                # If loading a video, use 'break' instead of 'continue'.
+                continue
+
+            # To improve performance, optionally mark the image as not writeable to
+            # pass by reference.
+            image.flags.writeable = False
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            try:
+                results = pose.process(image)
+            except Exception:
+                logging.warning(traceback.format_exc())
+                results = None
+                output_results(results,time=time)
+                continue
+
+            res = {'time': time/1000}
+            if results is None or results.pose_landmarks is None:
+                pass
+            else:
+                landmrks = {}
+                for ii, lm in enumerate(results.pose_landmarks.landmark):
+                    landmrks[ii] = {       
+                        'x': lm.x, 
+                        'y': lm.y, 
+                        'z': lm.z, 
+                        'visibility': lm.visibility
+                    }
+                res['landmarks'] = landmrks
+            result_list.append(res)
+
+            
+            if n > n_frames:
+                break
+
+            n+=1
+
+    cap.release()
+    return result_list
+    
+
 if __name__ == "__main__":
     args = argument_parse()
 

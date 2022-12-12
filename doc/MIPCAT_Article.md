@@ -86,6 +86,7 @@ Repeat the 3 above steps for every `.wav` file in the dataset.
 For privacy concerns, only one example is provided with video files. For the remaining, processed data is provided.
 
 The following commands should be run from the folder corresponding to P10 playing the lab instrument (change into `mozart_sample_dist/P10/Lab`)
+
 ## Adjust mouthpiece video settings
 
 This step creates a configuration file that selects a reference region in the mouthpiece and a color range matching the green strip in the mouthpiece. 
@@ -129,7 +130,11 @@ python -m mipcat.video.aruco_tracker P10_Mozart_Lab_Front.MP4
 
 A file should be created with the name `P10_Mozart_Lab_Front.json` with the positions of the detected markers.
 
-Repeat for `P10_Mozart_Lab_Side.MP4`
+Repeat for `P10_Mozart_Lab_Side.MP4` but now tell the script the image is rotated
+
+```bash
+python -m mipcat.video.aruco_tracker -r 270 P10_Mozart_Lab_Side.MP4
+```
 
 ## Run MediaPipe for body pose landmarks
 

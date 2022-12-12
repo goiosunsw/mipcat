@@ -1,6 +1,7 @@
 import cv2
 import os
 import json
+import pickle
 import argparse
 import numpy as np
 from tqdm import trange, tqdm
@@ -128,6 +129,7 @@ class ArucoTracker(object):
         ret, image = self.cap.read()
         self.cur_time = self.cap.get(cv2.CAP_PROP_POS_MSEC)/1000.0
         if self.crop:
+            crop = self.crop
             try:
                 image = image[crop[0]:crop[2],crop[1]:crop[3]]
             except TypeError:
@@ -157,13 +159,27 @@ class ArucoTracker(object):
         for iid,mrk in mrks.items():
             if 'corners' in mrk:
                 bbox = cv2.boundingRect(mrk['corners'])
-                mrk['bbox'] = bbox 
+                mrk['bbox'] = list(bbox) 
                 template = image[bbox[1]:bbox[1]+bbox[3],bbox[0]:bbox[0]+bbox[2],:]
                 self.cert_templates[iid] = template
                 self.cert_bbox[iid] = bbox
                 self.last_templates[iid] = template
                 self.last_bbox[iid] = bbox
                 
+        if self.crop is not None:
+            cropped_mrks = mrks.copy()
+            for iid,mrk in mrks.items():
+                for ii in [0,1]:
+                    try:
+                        mrk['bbox'][ii] += self.crop[1-ii]
+                    except KeyError:
+                        pass
+                    try:
+                        for crn in mrk['corners'][0]:
+                            crn[ii] += self.crop[1-ii]
+                    except KeyError:
+                        pass
+        
         self.markers.append(mrks)
                 
     def template_track_remaining(self, image):
@@ -174,10 +190,13 @@ class ArucoTracker(object):
             template = self.last_templates[iid]
             bbox = self.last_bbox[iid]
             pval,pos = self.template_track(image, template)
-            bbox = (pos[0],pos[1],bbox[2],bbox[3])
+            bbox = [pos[0],pos[1],bbox[2],bbox[3]]
             template = image[bbox[1]:bbox[1]+bbox[3],bbox[0]:bbox[0]+bbox[2],:]
             self.last_bbox[iid] = bbox
             self.last_templates[iid] = template
+            if self.crop is not None:
+                for ii in [0,1]:
+                    bbox[ii] += self.crop[1-ii]   
             markers[iid] = {'bbox':bbox,'source':'template','template_val':pval}
         
     def template_track(self, image, template):
@@ -239,6 +258,12 @@ class ArucoTracker(object):
                     json.dump(self.markers,f,cls=NumpyEncoder)
             else:
                 return json.dumps(self.markers,cls=NumpyEncoder)
+
+    def to_pickle(self, filename=None):
+        if filename is None:
+            filename = os.path.splitext(self.video_file)[0]+'_markers.pickle'
+        with open(filename,'wb') as f:
+            pickle.dump(self.markers, f)
         
     def center_array(self):
         cents=[{k:(v['bbox'][0]+v['bbox'][2]/2,v['bbox'][1]+v['bbox'][3]/2) 

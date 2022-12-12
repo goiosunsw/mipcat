@@ -155,7 +155,14 @@ def segment_notes_in_timeseries(fts, ats, median_filter_wind_sec=0.1,
         """
     amp = ats.v
     f0 = fts.v
-    assert(len(fts.v)==len(ats.v))
+    try:
+        assert(len(fts.v)==len(ats.v))
+    except AssertionError:
+        if len(fts.v)<len(ats.v):
+            ats = SampledTimeSeries(t=fts.t, v=ats[fts.t])
+        else:
+            fts = SampledTimeSeries(t=ats.t, v=fts[ats.t])
+            
 
     adb = 20*np.log10(amp)
     
@@ -614,6 +621,7 @@ def segment_with_clips(filename, clip_tier, meljs=None, output=None):
         score_pitch = meldf.round_pitch.values
         played_pitch = dfclip.round_pitch.values
         dfmatch = match_melodies(score_pitch, played_pitch)
+        dfmatch['expected_index'] = meldf.index.to_numpy()[dfmatch['expected_index'].values]
         dfmatch = dfmatch.join(meldf,on='expected_index',rsuffix='_exp')
         dfmatch['found_index_in_clip'] = dfmatch.found_index
         idx = ~dfmatch.found_index_in_clip.isna()
@@ -657,6 +665,10 @@ def segment_and_align(filename, meldf, tune=None, output=None):
     df = segment_notes_in_timeseries(fts,ats)
     
     dfmatch = auto_match_melodies(meldf, df)
+    # get indixes of original score with silences
+    idx = ~dfmatch.expected_index.isna()
+    dfmatch.loc[idx,'expected_index'] = meldf.index.to_numpy()[dfmatch.loc[idx,'expected_index'].astype('i').values]
+    #dfmatch = dfmatch.join(meldf,on='expected_index',rsuffix='_exp')
     dfm = (dfmatch.join(df.reset_index(),on='found_index',how='left') 
                  .join(meldf,on='expected_index',rsuffix='_exp'))
 

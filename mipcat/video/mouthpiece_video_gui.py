@@ -400,7 +400,8 @@ class App(tk.Tk):
                 self.send_status('Config written to {}'.format(outfile))
 
         elif element == "find":
-            templ_fn = '/'.join(os.path.abspath(template_trackers.__file__).split('\\')[:-2])+'/resources/template_25.png'
+            sep = os.path.sep
+            templ_fn = '/'.join(os.path.abspath(template_trackers.__file__).split(sep)[:-2])+'/resources/template_25.png'
             template = cv2.imread(templ_fn)
             h, w = template.shape[:2]
             self.send_status("Finding template...")
