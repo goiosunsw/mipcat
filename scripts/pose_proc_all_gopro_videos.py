@@ -27,18 +27,14 @@ if __name__ == "__main__":
     if outdir[-1] != os.path.sep:
         outdir += os.path.sep
                     
-    df = pd.read_csv(args.video_list, header=0, index_col=None)
-    df = df[((df['view']=='Front')|(df['view']=='Side'))&(df['view_type']=='new')]
-    print(df.shape)
-
-    for irow, row in df.iterrows():
+    with open(args.video_list, 'r') as fh:
         rot = 0
-        if row['view'] == 'Side':
-            rot=270
-        video_path = f"{args.root}/{row.subj_dir}/{gpdir}/{row['view']}/{row.filename}"
-        output_fn = os.path.splitext(row.filename)[0] + "_pose.pickle"
-        output_path = f"{args.output}/{row.subj_dir}/{gpdir}/{row['view']}/{output_fn}"
-        
-        crop = None
+        for line in fh:
+            if line.find('Side') >-1:
+                rot=270
+            video_path = args.root+line.strip()
+            output_path = f"{args.output}/{line.strip()}"
+            
+            crop = None
 
-        process_file(video_path,  output_file=output_path, rotate=rot, crop=crop)
+            process_file(video_path,  output_file=output_path, rotate=rot, crop=crop)
