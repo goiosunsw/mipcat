@@ -4,5 +4,6 @@
 *.py.un~
 *~
 *.uuid
+mipcat.egg-info/**
 
 collection/timeseries_generator.py.bak
