@@ -320,5 +320,8 @@ if __name__ == '__main__':
         import traceback
         traceback.print_exc()
     finally:
-        trk.to_json(output)
+        if output[-4:] == 'json':
+            trk.to_json(output)
+        else:
+            trk.to_pickle(output)
 

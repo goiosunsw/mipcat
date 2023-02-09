@@ -50,5 +50,7 @@ RUN pip install -e .
 
 EXPOSE 8888
 
-#CMD cd ${MAIN_PATH} && sh run_jupyterlab.sh
-CMD /bin/bash
+WORKDIR "/"
+
+CMD cd /mipcat && jupyter notebook --ip 0.0.0.0 --allow-root
+#CMD /bin/bash

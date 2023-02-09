@@ -41,7 +41,13 @@ def _base_stats_real(ts, tst, tend):
     rdict[f"{label}_var"] = iqr(ts, from_time=tst, to_time=tend)
     t, v = ts.times_values_in_range(from_time=tst, to_time=tend)
     try:
-        p = np.polyfit(t-np.min(t), v, 1)
+        idx = np.isfinite(v)
+        tt = t[idx]-np.min(t)
+        vv = v[idx]
+        if len(vv)<2:
+            p = np.nan*np.ones((2,))
+        else:
+            p = np.polyfit(tt, vv, 1)
         rdict[f"{label}_trend"] = p[0]
     except (np.linalg.LinAlgError, SystemError):
         pass
@@ -53,7 +59,8 @@ def _base_stats_real(ts, tst, tend):
     # divide the note in 3 parts and calculate averages
     tlims = np.linspace(tst,tend,4)
     for ti ,(tts, tte) in enumerate(zip(tlims[:-1],tlims[1:]),1):
-        rdict[f"{label}_t{ti}"] = ts.percentile(50, from_time=tts, to_time=tte)
+        rdict[f"{label}_t{ti}"] = ts.mean(from_time=tts, to_time=tte)
+        #rdict[f"{label}_t{ti}"] = ts.percentile(50, from_time=tts, to_time=tte)
 
     return rdict
 
@@ -132,6 +139,13 @@ def read_mouthpiece_ts(filename):
         data = pickle.load(f)
     return TimeSeries(t=data['t'], v=data['v'], label='mpcover')
 
+def read_pose_ts(filename):
+    tsl = tsg.ts_from_pickle(filename)
+    for ii, ts in enumerate(tsl):
+        if len(ts.v.shape)>1:
+            ts.v = ts.v[:,-1]
+    return tsl
+
 def process_notes_in_file(filedict, eg_tier='clip', note_tier='note', 
                           sounding_context_sec=0.2):
     allnotes = []
@@ -149,7 +163,14 @@ def process_notes_in_file(filedict, eg_tier='clip', note_tier='note',
         tsmp = read_mouthpiece_ts(mpts_path)
         ts.append(tsmp)
     except FileNotFoundError:
-        print(f"Not found {mpts_path}")
+        logging.warn(f"Not found {mpts_path}")
+
+    pose_path = basename+'_pose_ts.pickle'
+    try:
+        tsp = read_pose_ts(pose_path)
+        ts.extend(tsp)
+    except FileNotFoundError:
+        logging.warn(f"Not found {pose_path}")
     try:
         instrument = filedict['instrument']
     except KeyError:
