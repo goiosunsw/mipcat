@@ -16,6 +16,21 @@ import librosa as lr
 templ_names = ['template_20.png', 'template_25.png', 'template_30.png'] 
 scales = {}
 
+def get_video_data(video_file, rot=0):
+    p
+        try:
+            with open(pose_file, 'rb') as f:
+                pose_data = pickle.load(f)
+        except FileNotFoundError:
+            print(f"Not found : {pose_file}")
+            continue
+        try:
+            with open(aruco_file, 'rb') as f:
+                aruco_data = pickle.load(f)
+        except FileNotFoundError:
+            print(f"Not found : {aruco_file}")
+            continue
+
 def process_mouthpiece_data(area_data):
     time = np.array([x['time'] for x in area_data])
     area = np.array([x['area'] for x in area_data])
@@ -80,21 +95,24 @@ if __name__ == '__main__':
     args = parse_args()
 
     wvdfo = pd.read_csv(args.filename,index_col=0)
-    # select mouthpiece endoscope videos
-    wvdfo = wvdfo[(wvdfo.video_path.str.contains("Endoscope"))&(wvdfo.pct>1)]
-    # selct best matches
-    wvdf=wvdfo.groupby('wav_path').apply(lambda grp: grp.loc[grp.pct.idxmax()])
+    # Add view information
+    wvdfo['view'] = "mouthpiece"
+    wvdfo.loc[wvdfo.video_path.str.lower().str.contains('gopro'),'view'] = 'GOPRO'
+    wvdfo.loc[wvdfo.video_path.str.lower().str.contains('side'),'view'] = 'side'
+    wvdfo.loc[wvdfo.video_path.str.lower().str.contains('front'),'view'] = 'front'
 
+    # List video files for each wavfile
+    wav_vid_df = wvdfo.pivot(index='wav_path',columns='view',values='video_path')[["side","front"]]
+    wav_vid_df = wav_vid_df[(~wav_vid_df.isna()).any(axis=1)]
+    for (side_video, front_video), wavs in wav_vid_df.reset_index().groupby(['side','front']):
+        side_data = get_video_data(side_video, rot=270)
+        front_data = get_video_data(front_video, rot=0)
+        for w in wavs.wav_path:
+            print("  "+w)
+            angle = process_gopro_data(front_data, side_data)
     for vid_file, grp in wvdf.groupby('video_path'):
-        area_file = os.path.join(args.root,vid_file.replace('.mp4','_results.pickle'))
-        try:
-            with open(area_file, 'rb') as f:
-                area_data = pickle.load(f)
-        except FileNotFoundError:
-            print(f"Not found : {area_file}")
-            continue
         
-        time, len_mm = process_mouthpiece_data(area_data)
+        time, angle = process_gopro_data(aruco_data, pose_data)
 
         for irow, row in grp.iterrows():
             wavpath = row['wav_path']
