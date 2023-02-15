@@ -22,7 +22,7 @@ RUN pip install \
         seaborn \
         openpyxl \
         xlwt \
-        opencv-contrib-python \
+        opencv-contrib-python==4.5.5.64 \
         'scikit-image>=0.18' \
         imutils \
         pysimplegui \
@@ -50,5 +50,5 @@ RUN pip install -e .
 
 EXPOSE 8888
 
-#CMD cd ${MAIN_PATH} && sh run_jupyterlab.sh
-CMD /bin/bash
+CMD cd /mipcat && jupyter notebook --ip 0.0.0.0 --allow-root
+#CMD /bin/bash
