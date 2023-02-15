@@ -34,13 +34,23 @@ class TransientProcessor(object):
         sigpath = self.ts_root_dir + filename.replace('.wav','_ts.pickle')
         chans, sr = read_wav_chan_info(filepath, 
                                        self.channel_desc[chan_set_label])
-        self.msig = chans['mouth']
-        self.tsig = chans['tongue']
-        self.rsig = chans['reed']
+
+        try:
+            self.msig = chans['mouth']
+            self.tsig = chans['tongue']
+            self.rsig = chans['reed']
+        except KeyError:
+            self.msig = None
+            self.tsig = None
+            self.rsig = None
 
         tsl = ts_from_pickle(sigpath)
-        self.mouth_dc_ts = [ts for ts in tsl if ts.label=='mouth_dc'][0]
-        self.reed_dc_ts = [ts for ts in tsl if ts.label=='reed_dc'][0]
+        try:
+            self.mouth_dc_ts = [ts for ts in tsl if ts.label=='mouth_dc'][0]
+            self.reed_dc_ts = [ts for ts in tsl if ts.label=='reed_dc'][0]
+        except IndexError:
+            self.mouth_dc_ts = None
+            self.reed_dc_ts = None
         del tsl
 
         file_mask = self.notes.wavfile.str.replace('\\','/',regex=False).str.contains(filename)
@@ -58,7 +68,10 @@ class TransientProcessor(object):
 
         self.chpcts = chpcts
     
-        self.m_thr = chpcts['mouth'][1] + (chpcts['mouth'][95]-chpcts['mouth'][1])/10
+        try:
+            self.m_thr = chpcts['mouth'][1] + (chpcts['mouth'][95]-chpcts['mouth'][1])/10
+        except KeyError:
+            self.m_thr = 0
 
         fundmin_hz = .8*notes.exp_freq.min()
         fundmax_hz = 1.25*notes.exp_freq.max()
@@ -115,12 +128,13 @@ class TransientProcessor(object):
 
         self.prev_max_idx = 0
         notes = self.notes[file_mask].sort_values('start')
-        for irow, row in notes.iterrows():
-            try:
-                self.add_sensor_sig_info(row)
-            except Exception:
-                row['trans_err'] = traceback.format_exc()
-                traceback.print_exc()
+        if self.msig is not None:
+            for irow, row in notes.iterrows():
+                try:
+                    self.add_sensor_sig_info(row)
+                except Exception:
+                    row['trans_err'] = traceback.format_exc()
+                    traceback.print_exc()
             
         del tss, fss, ss
         gc.collect()
@@ -137,7 +151,8 @@ class TransientProcessor(object):
         svec = self.hpdb[self.prev_max_idx:max_idx]-self.small_sl*np.arange(max_idx-self.prev_max_idx)
         try:
             sidx = np.flatnonzero(svec>svec[0])[-1]
-            svec = svec[:sidx]
+            if sidx>1:
+                svec = svec[:sidx]
         except IndexError:
             pass
         prev_min = self.prev_max_idx+np.argmin(svec)
