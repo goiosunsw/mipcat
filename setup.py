@@ -1,3 +1,4 @@
+import os
 from setuptools import setup
 
 import unittest
@@ -5,6 +6,15 @@ def my_tests():
     test_loader = unittest.TestLoader()
     test_suite = test_loader.discover('tests', pattern='test_*.py')
     return test_suite
+
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join('..', path, filename))
+    return paths
+
+resources = package_files('resources')
 
 setup(name='mipcat',
       version='0.1',
@@ -15,10 +25,7 @@ setup(name='mipcat',
       license='GPL v3',
       packages=['mipcat', 'mipcat.signal', 'mipcat.video', 'mipcat.align'],
       package_dir={'mipcat': 'mipcat'},
-      package_data = {'mipcat': ['resources/melodies.yaml',
-                                 'resources/allruns.yaml',
-                                 'resources/file_list.yaml',
-                                 'resources/channel_desc.yaml']},
+      package_data = {'mipcat': resources},
       test_suite = 'setup.my_tests',
       zip_safe=False)
 

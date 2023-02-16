@@ -1,10 +1,52 @@
-FROM continuumio/anaconda3
+FROM python:3.8
+
+USER root
+RUN apt-get update
+RUN apt-get install -y libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+RUN apt-get install -y ffmpeg
+RUN apt-get install -y build-essential git curl
 
 # Install from conda env
-COPY environment.yml /tmp/environment.yml
+RUN pip install \
+        'numpy<=1.21.1' \
+        pandas \
+        scipy \
+        scikit-learn \
+        statsmodels \
+        ipympl \
+        ipykernel \
+        tqdm \
+        librosa \
+        pyyaml \
+        jupyterlab \
+        seaborn \
+        openpyxl \
+        xlwt \
+        opencv-contrib-python \
+        'scikit-image>=0.18' \
+        imutils \
+        pysimplegui \
+        pykalman \
+        mediapipe \
+        tgt \
+        setuptools
 
-# Conda packages
-RUN conda env create -f /tmp/environment.yml -n mipcat
+
+RUN mkdir mipcat
+RUN mkdir mipcat/Devel
+
+WORKDIR "/mipcat/Devel"
+
+RUN git clone https://github.com/goiosunsw/timeseries
+RUN git clone https://github.com/goiosunsw/pypevoc
+RUN git clone https://github.com/goiosunsw/mipcat
+
+WORKDIR "/mipcat/Devel/pypevoc"
+RUN pip install -e .
+WORKDIR "/mipcat/Devel/timeseries"
+RUN pip install -e .
+WORKDIR "/mipcat/Devel/mipcat"
+RUN pip install -e .
 
 EXPOSE 8888
 

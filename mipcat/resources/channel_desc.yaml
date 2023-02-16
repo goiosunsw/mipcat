@@ -262,6 +262,30 @@ inversed_endevcos:
   name: mouth
   type: pressure
   keep: True
+- axno: 0
+  desc: barrel pressure
+  name: barrel
+  type: pressure
+  sensor_id: B&K_bar
+  gain: 50000.0 
+  units: Pa
+  keep: True
+- axno: 0
+  desc: far pressure
+  name: farfield
+  type: pressure
+  sensor_id: Rode
+  gain: 1.0
+  units: 
+  keep: True
+- axno: 0
+  desc: external pressure
+  name: external
+  type: pressure
+  sensor_id: B&K_clar
+  gain: 50.0 
+  units: Pa
+  keep: True
 generic_clarinet:
 - axno: 2
   desc: tongue contact

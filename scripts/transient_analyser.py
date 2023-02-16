@@ -6,8 +6,10 @@ import yaml
 import logging
 import os
 import traceback
+import argparse
+import gc
 
-from timeseries_generator import read_wav_chan_info, ts_from_pickle
+from mipcat.signal.timeseries_generator import read_wav_chan_info, ts_from_pickle
 
 pctl = [1,5,25,50,75,95,99]
 logging.basicConfig(level=logging.INFO)
@@ -32,7 +34,24 @@ class TransientProcessor(object):
         sigpath = self.ts_root_dir + filename.replace('.wav','_ts.pickle')
         chans, sr = read_wav_chan_info(filepath, 
                                        self.channel_desc[chan_set_label])
+
+        try:
+            self.msig = chans['mouth']
+            self.tsig = chans['tongue']
+            self.rsig = chans['reed']
+        except KeyError:
+            self.msig = None
+            self.tsig = None
+            self.rsig = None
+
         tsl = ts_from_pickle(sigpath)
+        try:
+            self.mouth_dc_ts = [ts for ts in tsl if ts.label=='mouth_dc'][0]
+            self.reed_dc_ts = [ts for ts in tsl if ts.label=='reed_dc'][0]
+        except IndexError:
+            self.mouth_dc_ts = None
+            self.reed_dc_ts = None
+        del tsl
 
         file_mask = self.notes.wavfile.str.replace('\\','/',regex=False).str.contains(filename)
         notes = self.notes[file_mask].sort_values('start')
@@ -49,72 +68,76 @@ class TransientProcessor(object):
 
         self.chpcts = chpcts
     
+        try:
+            self.m_thr = chpcts['mouth'][1] + (chpcts['mouth'][95]-chpcts['mouth'][1])/10
+        except KeyError:
+            self.m_thr = 0
+
         fundmin_hz = .8*notes.exp_freq.min()
         fundmax_hz = 1.25*notes.exp_freq.max()
         
         for ch_name in self.use_chans:
             try:
                 ww = chans[ch_name]
+                break
             except KeyError:
                 logging.info(f'Channel {ch_name} not found')
                 continue
-            self.ch_name = ch_name
-            fss, tss, ss = sig.spectrogram(ww,fs=sr,nperseg=self.nwind,
-                                        noverlap=self.nwind-self.nhop,
-                                        window=self.window)
-            
-            self.tss = tss
-            
-            fundidx = np.flatnonzero((fss>fundmin_hz)&(fss<fundmax_hz))
-            self.funddb = 10*np.log10(np.sum(ss[fundidx,:],axis=0))
 
-            cutidx = np.flatnonzero(fss>self.cutoff_hz)[0]
-            self.hpdb = 10*np.log10(np.sum(ss[cutidx:,:],axis=0))
-
-            self.prev_max_idx=0
-
-            self.sl = self.slope_db_sec*self.thop
-            self.small_sl = self.slow_slope_db_sec*self.thop
-
-            notes = self.notes[file_mask].sort_values('start')
-
-            for irow, row in  notes.iterrows():
-                try:
-                    self.process_attack(row)
-                except Exception:
-                    print(f'Note {irow} at {row.start} channel {ch_name} -- attack')
-                    row['trans_err'] = traceback.format_exc()
-                    traceback.print_exc()
-            
+        del chans
+        self.ch_name = ch_name
+        fss, tss, ss = sig.spectrogram(ww,fs=sr,nperseg=self.nwind,
+                                    noverlap=self.nwind-self.nhop,
+                                    window=self.window)
+        del ww 
+        self.tss = tss
         
-            self.prev_max_idx = len(self.hpdb)-1
-            self.rel_sl = self.release_slope_db_sec*self.thop
-            notes = self.notes[file_mask].sort_values('start',ascending=False)
-            for irow, row in notes.iterrows():
-                try:
-                    self.process_release(row)
-                except Exception:
-                    print(f'Note {irow} at {row.start} channel {ch_name} -- release')
-                    row['trans_err'] = traceback.format_exc()
-                    traceback.print_exc()
-            break
+        fundidx = np.flatnonzero((fss>fundmin_hz)&(fss<fundmax_hz))
+        self.funddb = 10*np.log10(np.sum(ss[fundidx,:],axis=0))
 
-        self.msig = chans['mouth']
-        self.m_thr = chpcts['mouth'][1] + (chpcts['mouth'][95]-chpcts['mouth'][1])/10
-        self.tsig = chans['tongue']
-        self.rsig = chans['reed']
-        self.mouth_dc_ts = [ts for ts in tsl if ts.label=='mouth_dc'][0]
-        self.reed_dc_ts = [ts for ts in tsl if ts.label=='reed_dc'][0]
+        cutidx = np.flatnonzero(fss>self.cutoff_hz)[0]
+        self.hpdb = 10*np.log10(np.sum(ss[cutidx:,:],axis=0))
+
+        self.prev_max_idx=0
+
+        self.sl = self.slope_db_sec*self.thop
+        self.small_sl = self.slow_slope_db_sec*self.thop
+
+        notes = self.notes[file_mask].sort_values('start')
+
+        for irow, row in  notes.iterrows():
+            try:
+                self.process_attack(row)
+            except Exception:
+                print(f'Note {irow} at {row.start} channel {ch_name} -- attack')
+                row['trans_err'] = traceback.format_exc()
+                traceback.print_exc()
+        
+    
+        self.prev_max_idx = len(self.hpdb)-1
+        self.rel_sl = self.release_slope_db_sec*self.thop
+        notes = self.notes[file_mask].sort_values('start',ascending=False)
+        for irow, row in notes.iterrows():
+            try:
+                self.process_release(row)
+            except Exception:
+                print(f'Note {irow} at {row.start} channel {ch_name} -- release')
+                row['trans_err'] = traceback.format_exc()
+                traceback.print_exc()
+
 
         self.prev_max_idx = 0
         notes = self.notes[file_mask].sort_values('start')
-        for irow, row in notes.iterrows():
-            try:
-                self.add_sensor_sig_info(row)
-            except Exception:
-                row['trans_err'] = traceback.format_exc()
-                traceback.print_exc()
+        if self.msig is not None:
+            for irow, row in notes.iterrows():
+                try:
+                    self.add_sensor_sig_info(row)
+                except Exception:
+                    row['trans_err'] = traceback.format_exc()
+                    traceback.print_exc()
             
+        del tss, fss, ss
+        gc.collect()
         return notes
 
     def process_attack(self, row):
@@ -128,7 +151,8 @@ class TransientProcessor(object):
         svec = self.hpdb[self.prev_max_idx:max_idx]-self.small_sl*np.arange(max_idx-self.prev_max_idx)
         try:
             sidx = np.flatnonzero(svec>svec[0])[-1]
-            svec = svec[:sidx]
+            if sidx>1:
+                svec = svec[:sidx]
         except IndexError:
             pass
         prev_min = self.prev_max_idx+np.argmin(svec)
@@ -304,9 +328,21 @@ def init_processor( csv_file, chan_desc_file, note_file, melody_file, original_r
     tp.init_csv(csv_file, original_root_dir=original_root_dir, ts_root_dir=ts_root_dir)
     return tp
 
+def parse_args():
+    ap = argparse.ArgumentParser()
+    
+    ap.add_argument("filename", help="CSV file with note segmentation")
+    ap.add_argument("-c", "--csv-runsheet", help="CSV runsheet")
+    ap.add_argument("-d", "--channel-desc", help="YAML channel description")
+    ap.add_argument("-m", "--melody-file", help="CSV melody file (generated by build_note_database)")
+    ap.add_argument("-o", "--output", help="Output file (pickle)")
+    ap.add_argument("-r", "--root", help="root folder for the original recordings")
+    ap.add_argument("-i", "--intermediate", help="root folder for intermediate calculations")
+    return ap.parse_args()
 
 if __name__ == "__main__":
     
+    args = parse_args()
     logging.getLogger().setLevel(logging.INFO)
     # csv_file = "E:/Data/2021_SensorClarinet/original/wav_melody_list_manual.csv"
     # desc_file = "C:/Users/goios/Devel/sensor_clarinet_processing/runsheets/channel_desc.yaml"
@@ -321,10 +357,26 @@ if __name__ == "__main__":
     original_root_dir = "E:/Data/2021_SensorClarinet/original/"
     intermediate_root_dir = "E:/Data/2021_SensorClarinet/intermediate/"
 
+    csv_file = args.csv_runsheet
+    desc_file = args.channel_desc
+    melody_file = args.melody_file
+    if args.output is None:
+        output_file = "notes_w_transients.pandas.pickle"
+    else:
+        output_file = args.output
+    original_root_dir = args.root
+    if args.intermediate is None:
+        intermediate_root_dir = os.path.join(os.path.realpath(original_root_dir+'/..'),"intermediate")
+        logging.info(f"Intermediate folder set to {intermediate_root_dir}")
+    else:
+        intermediate_root_dir = args.intermediate
+    
+    note_file = args.filename
+
     tp = init_processor(csv_file, desc_file, note_file, melody_file, 
                         original_root_dir=original_root_dir,
                         ts_root_dir=intermediate_root_dir)
 
     tdf =  tp.process_csv(csv_file, original_root_dir=original_root_dir,ts_root_dir=intermediate_root_dir)
 
-    tdf.to_pickle('transients.pandas.pickle')
+    tdf.to_pickle(output_file)

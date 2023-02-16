@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 import re
 import yaml
 import numpy as np
@@ -8,7 +9,7 @@ from tqdm import tqdm
 
 
 #notedf = pd.read_csv("played_notes.csv",index_col=0)
-notedf = pd.read_pickle('transients.pandas.pickle')
+notedf = pd.read_pickle(sys.argv[1]) #pd.read_pickle('transients.pandas.pickle')
 
 meldf = pd.read_csv("melody_scores.csv",index_col=0)
 verdf = pd.read_csv("versions_played.csv",index_col=0)

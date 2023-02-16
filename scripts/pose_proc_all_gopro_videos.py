@@ -28,12 +28,13 @@ if __name__ == "__main__":
         outdir += os.path.sep
                     
     with open(args.video_list, 'r') as fh:
-        rot = 0
         for line in fh:
+            rot = 0
             if line.find('Side') >-1:
                 rot=270
             video_path = args.root+line.strip()
             output_path = f"{args.output}/{line.strip()}"
+            output_path = os.path.splitext(output_path)[0]+'_pose.pickle'
             
             crop = None
 
