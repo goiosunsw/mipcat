@@ -39,6 +39,7 @@ def RMSts(x, sr=1, nwind=1024, nhop=512, windfunc=np.blackman, label='ampl'):
     while (iend < nsam):
         thisx = xp[ist:iend]
         xw = thisx*wind
+        xw -= np.mean(xw)
 
         ret.append(np.sum(xw*xw/wsum2))
         t.append((float(ist+iend)/2.0-npad)/float(sr))
