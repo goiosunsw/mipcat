@@ -171,7 +171,7 @@ ext_only:
   name: external
   type: pressure
   sensor_id: B&K_clar
-  gain: 50000.0 
+  gain: 50.0 
   units: Pa
   keep: True
 - axno: null
@@ -230,7 +230,7 @@ farfield_only:
   name: external
   type: pressure
   sensor_id: B&K_clar
-  gain: 50000.0 
+  gain: 50.0 
   units: Pa
   keep: False
 - axno: null

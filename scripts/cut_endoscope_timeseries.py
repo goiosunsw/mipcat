@@ -3,6 +3,7 @@ import os
 import argparse
 import wave
 import re
+import json
 import pickle
 import numpy as np
 from mipcat.signal.timeseries_generator import ts_from_pickle, ts_to_pickle
@@ -73,6 +74,8 @@ def parse_args():
     ap.add_argument("root", help="root folder for search")
     ap.add_argument("-o", "--output", default="note_list.csv",
                         help="output file")
+    ap.add_argument("-s", "--suffix", default="_results.pickle",
+                        help="suffix of calculated mouthpiece area files")
     return ap.parse_args()
 
 
@@ -81,15 +84,22 @@ if __name__ == '__main__':
 
     wvdfo = pd.read_csv(args.filename,index_col=0)
     # select mouthpiece endoscope videos
-    wvdfo = wvdfo[(wvdfo.video_path.str.contains("Endoscope"))&(wvdfo.pct>1)]
+    wvdfo = wvdfo[(wvdfo.video_path.str.contains("Endoscope") | 
+                   wvdfo.video_path.str.contains("Mouthpiece"))&(wvdfo.pct>1)]
     # selct best matches
     wvdf=wvdfo.groupby('wav_path').apply(lambda grp: grp.loc[grp.pct.idxmax()])
+    print(f"{len(wvdf)} files to process")
 
     for vid_file, grp in wvdf.groupby('video_path'):
-        area_file = os.path.join(args.root,vid_file.replace('.mp4','_results.pickle'))
+        meas_file = vid_file.strip().replace('.mp4',args.suffix)
+        area_file = os.path.join(args.root, meas_file)
         try:
-            with open(area_file, 'rb') as f:
-                area_data = pickle.load(f)
+            if os.path.splitext(area_file)[1] == ".json":
+                with open(area_file, 'r') as f:
+                    area_data = json.load(f)
+            else:
+                with open(area_file, 'rb') as f:
+                    area_data = pickle.load(f)
         except FileNotFoundError:
             print(f"Not found : {area_file}")
             continue

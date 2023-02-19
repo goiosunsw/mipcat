@@ -80,8 +80,13 @@ class ArucoTracker(object):
             progress (bool, optional): Show progress bar. Defaults to False.
             forget_time (float, optional): Do not keep tracking after x seconds. Defaults to 5.0.
         """
-        self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_50)
-        arucoParams = cv2.aruco.DetectorParameters_create()
+        try:
+            self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_50)
+            arucoParams = cv2.aruco.DetectorParameters_create()
+        except AttributeError:
+            # opencv >= 4.7 uses different api
+            self.arucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+            arucoParams = cv2.aruco.DetectorParameters()
         arucoParams.adaptiveThreshConstant = 5
         arucoParams.adaptiveThreshWinSizeMin = 3
         arucoParams.adaptiveThreshWinSizeStep= 5

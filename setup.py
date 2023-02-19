@@ -14,7 +14,8 @@ def package_files(directory):
             paths.append(os.path.join('..', path, filename))
     return paths
 
-resources = package_files('resources')
+resources = package_files('mipcat/resources')
+print(resources)
 
 setup(name='mipcat',
       version='0.1',

@@ -16,30 +16,6 @@ import librosa as lr
 from pykalman import KalmanFilter
 
 
-<<<<<<< HEAD
-def get_video_data(video_file, rot=0):
-    p
-        try:
-            with open(pose_file, 'rb') as f:
-                pose_data = pickle.load(f)
-        except FileNotFoundError:
-            print(f"Not found : {pose_file}")
-            continue
-        try:
-            with open(aruco_file, 'rb') as f:
-                aruco_data = pickle.load(f)
-        except FileNotFoundError:
-            print(f"Not found : {aruco_file}")
-            continue
-
-def process_mouthpiece_data(area_data):
-    time = np.array([x['time'] for x in area_data])
-    area = np.array([x['area'] for x in area_data])
-        
-    # Scale data
-    tp=np.array([[x['other_rects'][tn]['rect'] for tn in templ_names] for x in area_data if  'other_rects' in x])
-    tt=np.array([x['time'] for x in area_data if  'other_rects' in x])
-=======
 VIEW_CONFIG = {
     'Side': {
         'marker_ids': [5, 9],
@@ -50,7 +26,6 @@ VIEW_CONFIG = {
         'rotate': 0
     }
 }
->>>>>>> 8e675897620c8f825af68dba5d6b856760fe1dc7
 
 def kfilter(x, observation_error=0.05, observation_cov=0.001,
                pos_proc_error=0.15, pos_proc_xy_cov=0.015,
@@ -210,6 +185,10 @@ def parse_args():
     ap.add_argument("root", help="root folder for search")
     ap.add_argument("-o", "--output", default="note_list.csv",
                         help="output file")
+    ap.add_argument('-a', "--aruco-suffix", default="_markers.pickle", 
+                    help = "suffix for extracted aruco marker file")
+    ap.add_argument('-p', "--pose-suffix", default="_pose.pickle", 
+                    help = "suffix for extracted aruco marker file")
     return ap.parse_args()
 
 
@@ -218,40 +197,20 @@ if __name__ == '__main__':
     args = parse_args()
 
     wvdfo = pd.read_csv(args.filename,index_col=0)
-<<<<<<< HEAD
-    # Add view information
-    wvdfo['view'] = "mouthpiece"
-    wvdfo.loc[wvdfo.video_path.str.lower().str.contains('gopro'),'view'] = 'GOPRO'
-    wvdfo.loc[wvdfo.video_path.str.lower().str.contains('side'),'view'] = 'side'
-    wvdfo.loc[wvdfo.video_path.str.lower().str.contains('front'),'view'] = 'front'
-
-    # List video files for each wavfile
-    wav_vid_df = wvdfo.pivot(index='wav_path',columns='view',values='video_path')[["side","front"]]
-    wav_vid_df = wav_vid_df[(~wav_vid_df.isna()).any(axis=1)]
-    for (side_video, front_video), wavs in wav_vid_df.reset_index().groupby(['side','front']):
-        side_data = get_video_data(side_video, rot=270)
-        front_data = get_video_data(front_video, rot=0)
-        for w in wavs.wav_path:
-            print("  "+w)
-            angle = process_gopro_data(front_data, side_data)
-    for vid_file, grp in wvdf.groupby('video_path'):
-        
-        time, angle = process_gopro_data(aruco_data, pose_data)
-=======
     # select mouthpiece endoscope videos
     wvdfo = wvdfo[(wvdfo.video_path.str.contains("Side"))&(wvdfo.pct>1)]
     # selct best matches
     wvdf=wvdfo.groupby('wav_path').apply(lambda grp: grp.loc[grp.pct.idxmax()])
 
     for vid_file, vid_grp in wvdf.groupby('video_path'):
-        side_file = os.path.join(args.root, vid_file.replace('.MP4','_markers.pickle'))
+        side_file = os.path.join(args.root, vid_file.replace('.MP4',args.aruco_suffix))
         try:
             with open(side_file, 'rb') as f:
                 mrk_side = pickle.load(f)
         except FileNotFoundError:
             print(f"Not found : {mrk_side}")
             continue
-        side_pose_file = os.path.join(args.root, vid_file.replace('.MP4','_pose.pickle'))
+        side_pose_file = os.path.join(args.root, vid_file.replace('.MP4',args.pose_suffix))
         try:
             with open(side_pose_file, 'rb') as f:
                 body_side = pickle.load(f)
@@ -265,7 +224,6 @@ if __name__ == '__main__':
             if vid_file.lower().find("side") != -1:
                 continue
             
->>>>>>> 8e675897620c8f825af68dba5d6b856760fe1dc7
 
         for irow, row in vid_grp.iterrows():
             wavpath = row['wav_path']

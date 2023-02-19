@@ -26,7 +26,6 @@ dependencies:         # everything under this, installed by conda
   - xlwt
   - widgetsnbextension
   - nb_conda_kernels
-  - opencv
   - scikit-image >= 0.18
   - imutils
   - pysimplegui
@@ -40,4 +39,5 @@ dependencies:         # everything under this, installed by conda
     - future
     - mediapipe
     - tgt
+    - opencv-contrib-python==4.5.5.64
 

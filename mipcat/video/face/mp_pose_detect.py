@@ -14,7 +14,16 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
+def results_to_json(res, filename):
+        class NumpyEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                return json.JSONEncoder.default(self, obj)
 
+        with open(filename, 'w') as f:
+            json.dump(res, f, cls=NumpyEncoder)
+    
 class ArucoTracker(object):
     def __init__(self, from_time=0.0, to_time=None, track_undetected=False,
                  output=None):
@@ -383,5 +392,26 @@ if __name__ == "__main__":
 
             n+=1
         cap.release()
-        outfile = os.path.splitext(args.filename)[0]+'_pose.pickle'
-        pickle_results(result_list, outfile)
+
+        if len(args.output)==0:
+            outfile = os.path.splitext(args.filename)[0]+'_pose.pickle'
+        else:
+            output = args.output 
+
+        if len(args.crop)>0:
+            crop = [int(x) for x in args.crop.split(':')]
+            print('cropping to ',crop)
+        else:
+            crop=None
+
+        trk = ArucoTracker(vidfile, from_time=args.start_sec,to_time=end_time,progress=True, crop=crop)
+        try:
+            trk.run()
+        except AttributeError:
+            import traceback
+            traceback.print_exc()
+        finally:
+            if output[-4:] == 'json':
+                results_to_json(result_list, outfile)
+            else:
+                pickle_results(result_list, outfile)
