@@ -13,7 +13,7 @@ The project consists of hardware and software modules. This repository mostly or
 
 # Example: MIPCAT article figure generation
 
-If you read article [1](https://doi.org/10.3389/frsip.2023.1089366), the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md). 
+If you read article [[1]](https://doi.org/10.3389/frsip.2023.1089366), the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md). 
 
 Download the sample dataset [here](https://cloudstor.aarnet.edu.au/plus/s/1d1oeOAmsJU4nJ2). When prompted, use the password `MIPCAT_unsw2022`
 
