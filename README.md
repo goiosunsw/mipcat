@@ -119,4 +119,4 @@ The next step is to aggregate note features and build a note database
 python -m mipcat.signal.build_note_database runsheets/wav_list.csv -i 
 ```
 # Hardware used in the sensor-fitted clarinet
-![Clarinet electonics schematics](/doc/CLARITRONICS v3B.png)
+![Clarinet electonics schematics](/doc/CLARITRONICS.png)
