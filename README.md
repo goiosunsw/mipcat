@@ -13,7 +13,7 @@ The project consists of hardware and software modules. This repository mostly or
 
 # Example: MIPCAT article figure generation
 
-If you read article [1], the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md). 
+If you read article [1](https://doi.org/10.3389/frsip.2023.1089366), the figures can be generated following the procedure in [doc/MIPCAT_Article.md](doc/MIPCAT_Article.md). 
 
 Download the sample dataset [here](https://cloudstor.aarnet.edu.au/plus/s/1d1oeOAmsJU4nJ2). When prompted, use the password `MIPCAT_unsw2022`
 
@@ -119,4 +119,15 @@ The next step is to aggregate note features and build a note database
 python -m mipcat.signal.build_note_database runsheets/wav_list.csv -i 
 ```
 # Hardware used in the sensor-fitted clarinet
+
+Homemade electronics included:
+* A reed position sensor (photo-reflective sensor)
+* Bridge amplifier (pressure transducer conditioning) 
+* Tongue contact sensor (a simple switch letting through a 10uA current)
+* Power supply (12v battery) 
+
 ![Clarinet electonics schematics](/doc/CLARITRONICS.png)
+
+For more details please read [1](https://doi.org/10.3389/frsip.2023.1089366)
+
+[1] Almeida, A., Li W., Schubert, E., Smith, J. and Wolfe, J. "MIPCAT -- a Music Instrument Performance Capture and Analysis Toolbox"
