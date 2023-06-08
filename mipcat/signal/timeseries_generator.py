@@ -457,7 +457,8 @@ def process_wav(filename, channels, wind_len=2**10,
 
     # mouth: ac
     wl = sig.resample(wr, n_res*wind_len)
-    wh = ww[:len(wl)]-wl
+    wlr = sig.resample(wl, ww.shape[0])
+    wh = ww-wlr
     cme = lr.feature.rms(y=wh, frame_length=wind_len, hop_length=hop_length, 
                          center=True, pad_mode='reflect')[0]
     m_ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
