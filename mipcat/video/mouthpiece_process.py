@@ -193,6 +193,7 @@ class FrameProcessor(object):
         self.video_file = video_file
         cap = cv2.VideoCapture(cv2.samples.findFile(video_file))
         ret, img = cap.read()
+        self.frame_size = img.shape[1::-1]
         length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         rate = (cap.get(cv2.CAP_PROP_FPS))
 

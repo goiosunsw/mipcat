@@ -24,6 +24,7 @@ def rect_angle(rot_rect):
 
 class MouthpieceTracker(FrameProcessor):
     def __init__(self, nbr_templates_every=30, *args, **kwargs ):
+        self.output_video = kwargs.pop("video_output", "")
         super().__init__(*args, **kwargs)
         self.template_rect = None
         self.template_time = 0.0
@@ -33,6 +34,18 @@ class MouthpieceTracker(FrameProcessor):
         if self.nbr_templates_every:
             self.load_nbr_templates()
         self.last_nbr_template_time = -1000
+        self.res_video = None
+            
+    def set_video_source(self, video_file, from_time=0.0, to_time=None):    
+        
+        super().set_video_source(video_file, from_time=from_time, to_time=to_time)
+        if self.output_video != "":
+            size = self.frame_size
+            rate = 1000./self.frame_msec
+            print(size)
+            self.res_video = cv2.VideoWriter(self.output_video,
+                                             cv2.VideoWriter_fourcc(*"MJPG"),
+                                                                    rate, size)
         
     def load_nbr_templates(self):
         
@@ -130,6 +143,10 @@ class MouthpieceTracker(FrameProcessor):
             self.find_template(img)
             self.crop_strip(self.templ_cent, self.line_angle)
             self.measure()
+
+            if self.res_video:
+                resimg = self.image_results()
+                self.res_video.write(resimg)
             
         self.this_res = {'area':int(self.area),
                          'filled_area':int(self.filled_area),
@@ -162,6 +179,9 @@ def argument_parse():
     parser.add_argument("-o", "--output", default="", 
                         help="output file (leave empty for same name as video)")
 
+    parser.add_argument("-v", "--video-output", default="",  
+                        help="output video tracking (default = no output)")
+
     return parser.parse_args()
 
 
@@ -185,7 +205,7 @@ if __name__ == "__main__":
     else:
         end_time = args.end_sec
 
-    processor = MouthpieceTracker(progress=True)
+    processor = MouthpieceTracker(progress=True, video_output=args.video_output)
     processor.set_video_source(args.filename, from_time=args.start_sec, to_time=end_time)
     processor.read_config(color_range_json_file)
     processor.run()
@@ -193,4 +213,7 @@ if __name__ == "__main__":
         processor.to_pickle(output)
     else:
         processor.to_json(output)
+    
+    if processor.res_video:
+        processor.res_video.release()
 
