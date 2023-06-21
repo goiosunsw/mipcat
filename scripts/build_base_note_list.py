@@ -7,6 +7,7 @@ import tgt
 import pandas as pd
 import numpy as np
 import librosa as lr
+import sqlite3
 from mipcat.signal.timeseries_generator import ts_from_pickle
 
 def get_note_excerpt_tiers(tg):
@@ -154,7 +155,7 @@ def parse_args():
     return ap.parse_args()
 
 
-def build_note_table(wmldf, tgroot):
+def build_note_table(wmldf, tgroot, database="notes.sqlite"):
     wmldf['ts_path'] = ''
 
     notes = []
