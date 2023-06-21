@@ -37,9 +37,9 @@ def RMSts(x, sr=1, nwind=1024, nhop=512, windfunc=np.blackman, label='ampl'):
     wsum2 = np.sum(wind**2)
 
     while (iend < nsam):
-        thisx = xp[ist:iend]
+        thisx_a = xp[ist:iend]
+        thisx = thisx_a - np.mean(thisx_a)
         xw = thisx*wind
-        xw -= np.mean(xw)
 
         ret.append(np.sum(xw*xw/wsum2))
         t.append((float(ist+iend)/2.0-npad)/float(sr))
@@ -422,77 +422,76 @@ def process_wav_chan_info(w, sr, wind_len=2**10,
     return ret
 
 
-def process_wav(filename, channels, wind_len=2**10,
-                hop_length=2**9, fmin=60, fmax=1500,
-                f0_win_len=1024, base_chan='barrel'):
-    sr,w = wavfile.read(filename)
-    logging.info(f'Read file {filename}')
+# def process_wav(filename, channels, wind_len=2**10,
+#                 hop_length=2**9, fmin=60, fmax=1500,
+#                 f0_win_len=1024, base_chan='barrel'):
+#     sr,w = wavfile.read(filename)
+#     logging.info(f'Read file {filename}')
 
-    barrel_idx = [x['name'] for x in channels].index('barrel')
-    mouth_idx = [x['name'] for x in channels].index('mouth')
-    reed_idx = [x['name'] for x in channels].index('reed')
-    ext_idx = [x['name'] for x in channels].index('external') 
-    base_idx = [x['name'] for x in channels].index(base_chan)
+#     barrel_idx = [x['name'] for x in channels].index('barrel')
+#     mouth_idx = [x['name'] for x in channels].index('mouth')
+#     reed_idx = [x['name'] for x in channels].index('reed')
+#     ext_idx = [x['name'] for x in channels].index('external') 
+#     base_idx = [x['name'] for x in channels].index(base_chan)
     
-    # f0 is extracted from the base channel depending on instrument used
-    ww = w[:, base_idx].astype('f')
-    freq_ts = chunked_yin(ww, sr=sr, hop_length=hop_length,
-                          frame_length=f0_win_len, fmin=fmin, fmax=fmax,
-                          label=base_chan) 
-    # voice_ts = SampledTimeSeries(v=voiced, t=lr.frames_to_time(np.arange(len(f0)),
-    #                             sr=sr,hop_length=hop_length),label='voice_prob')
+#     # f0 is extracted from the base channel depending on instrument used
+#     ww = w[:, base_idx].astype('f')
+#     freq_ts = chunked_yin(ww, sr=sr, hop_length=hop_length,
+#                           frame_length=f0_win_len, fmin=fmin, fmax=fmax,
+#                           label=base_chan) 
+#     # voice_ts = SampledTimeSeries(v=voiced, t=lr.frames_to_time(np.arange(len(f0)),
+#     #                             sr=sr,hop_length=hop_length),label='voice_prob')
 
-    ww = w[:, barrel_idx].astype('f')
-    cme = lr.feature.rms(y=ww, frame_length=wind_len, hop_length=hop_length, 
-                         center=True, pad_mode='reflect')[0]
-    ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
-                                sr=sr, hop_length=hop_length), label='barrel_ampl')
+#     ww = w[:, barrel_idx].astype('f')
+#     cme = lr.feature.rms(y=ww, frame_length=wind_len, hop_length=hop_length, 
+#                          center=True, pad_mode='reflect')[0]
+#     ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
+#                                 sr=sr, hop_length=hop_length), label='barrel_ampl')
 
-    # mouth: dc
-    ww = w[:, mouth_idx].astype('f')
-    n_orig = w.shape[0]
-    n_res = int(np.floor(n_orig/wind_len))
-    wr = sig.resample(ww[:n_res*wind_len], n_res)
-    mouth_ts = SampledTimeSeries(wr, dt=wind_len/sr, label='mouth_dc')
+#     # mouth: dc
+#     ww = w[:, mouth_idx].astype('f')
+#     n_orig = w.shape[0]
+#     n_res = int(np.floor(n_orig/wind_len))
+#     wr = sig.resample(ww[:n_res*wind_len], n_res)
+#     mouth_ts = SampledTimeSeries(wr, dt=wind_len/sr, label='mouth_dc')
 
-    # mouth: ac
-    wl = sig.resample(wr, n_res*wind_len)
-    wlr = sig.resample(wl, ww.shape[0])
-    wh = ww-wlr
-    cme = lr.feature.rms(y=wh, frame_length=wind_len, hop_length=hop_length, 
-                         center=True, pad_mode='reflect')[0]
-    m_ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
-                                  sr=sr, hop_length=hop_length), label='mouth_ac')
+#     # mouth: ac
+#     wl = sig.resample(wr, n_res*wind_len)
+#     wh = ww[:len(wl)]-wl
+#     cme = lr.feature.rms(y=wh, frame_length=wind_len, hop_length=hop_length, 
+#                          center=True, pad_mode='reflect')[0]
+#     m_ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
+#                                   sr=sr, hop_length=hop_length), label='mouth_ac')
  
-    # reed
-    ww = w[:, reed_idx].astype('f')
-    n_orig = w.shape[0]
-    n_res = int(np.floor(n_orig/wind_len))
-    wr = sig.resample(ww[:n_res*wind_len], n_res)
-    reed_ts = SampledTimeSeries(wr, dt=wind_len/sr, label='reed_dc')
+#     # reed
+#     ww = w[:, reed_idx].astype('f')
+#     n_orig = w.shape[0]
+#     n_res = int(np.floor(n_orig/wind_len))
+#     wr = sig.resample(ww[:n_res*wind_len], n_res)
+#     reed_ts = SampledTimeSeries(wr, dt=wind_len/sr, label='reed_dc')
 
-    # external: amplitude, freq and centroid
-    ww = w[:, ext_idx].astype('f')
+#     # external: amplitude, freq and centroid
+#     ww = w[:, ext_idx].astype('f')
 
-    cme = lr.feature.rms(y=ww, frame_length=wind_len, hop_length=hop_length, 
-                         center=True, pad_mode='reflect')[0]
-    x_ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
-                                  sr=sr, hop_length=hop_length), 
-                                  label='external_ampl')
+#     cme = lr.feature.rms(y=ww, frame_length=wind_len, hop_length=hop_length, 
+#                          center=True, pad_mode='reflect')[0]
+#     x_ampl_ts = SampledTimeSeries(v=cme, t=lr.frames_to_time(np.arange(len(cme)),
+#                                   sr=sr, hop_length=hop_length), 
+#                                   label='external_ampl')
 
-    centroid = lr.feature.spectral_centroid(y=ww, sr=sr,
-                                            hop_length=hop_length)[0]
-    x_cent_ts = SampledTimeSeries(v=centroid, 
-                                  t=lr.frames_to_time(np.arange(len(centroid)),
-                                                      sr=sr,
-                                                      hop_length=hop_length),
-                                  label='external_cent')
+#     centroid = lr.feature.spectral_centroid(y=ww, sr=sr,
+#                                             hop_length=hop_length)[0]
+#     x_cent_ts = SampledTimeSeries(v=centroid, 
+#                                   t=lr.frames_to_time(np.arange(len(centroid)),
+#                                                       sr=sr,
+#                                                       hop_length=hop_length),
+#                                   label='external_cent')
 
-    # quantiles
-    qa = windowed_quantiles(w, pcts)
+#     # quantiles
+#     qa = windowed_quantiles(w, pcts)
 
  
-    return [freq_ts, ampl_ts, mouth_ts, m_ampl_ts, reed_ts, x_ampl_ts, x_cent_ts]
+#     return [freq_ts, ampl_ts, mouth_ts, m_ampl_ts, reed_ts, x_ampl_ts, x_cent_ts]
 
 
 def process_wav(filename, channels, wind_len=2**10,
