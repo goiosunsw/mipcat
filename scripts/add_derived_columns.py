@@ -16,6 +16,7 @@ verdf = pd.read_csv("versions_played.csv",index_col=0)
 wavdf = pd.read_csv('reed_lims.csv')
 wavdf = wavdf[['ext_wavfile','reed_high_max','reed_low_max']]
 
+print("Number of takes: ",len(verdf))
 # Check for duplicate versions
 dups = set(verdf.index).difference(verdf.drop_duplicates().index)
 print(f'Duplicate version numbers: {str(dups)}')
@@ -80,12 +81,16 @@ def ren_fun(x):
 verdf.index.name = 'gl_ver_idx'
 
 verdf['eg']=verdf['eg'].map(ren_fun)
-verdf=verdf[verdf['eg'].isin(keep_eg)]
+#verdf=verdf[verdf['eg'].isin(keep_eg)]
+verdf[~verdf.eg.isin(keep_eg)] = ''
+print("Number of takes after EG rename: ",len(verdf))
 
 # Link version info to note table
 link_keys = ['wavfile','ver_nbr']
 needed_keys = ['gl_ver_idx','eg','instrument']
-notedf=notedf.merge(verdf.reset_index()[link_keys+needed_keys],on=link_keys)
+notedf=notedf.merge(verdf.reset_index()[link_keys+needed_keys],on=link_keys, how='left')
+print("Number of takes in note database ",len(notedf.gl_ver_idx.unique()))
+print("Tunes in note database",notedf.tune.unique())
 
 ################
 # Correct tables for reed position
@@ -216,6 +221,8 @@ notedf.loc[notedf['ext_db_var']<min_var,'ext_db_var']=min_var
 notedf['mouth_db_avg'] = 20*np.log10(notedf['mouth_dc_avg']/2e-5)
 notedf['mouth_db_var'] = 20*np.log10(1+notedf['mouth_dc_var']/notedf['mouth_dc_avg'])
 notedf['mouth_dc_var_frac'] = notedf['mouth_dc_var']/notedf['mouth_dc_avg']
+
+print("Tunes in note database at end",notedf.tune.unique())
 notedf.to_pickle('played_notes_derived.pickle')
 
 musical_par_cols = ['ext_db_avg','ext_db_var','ltempo','detune_corr','st_var','st_trend',
